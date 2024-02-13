@@ -5,7 +5,7 @@ import {first} from 'ckeditor5/src/utils';
 
 export default class UiPatternsGroupCommand extends Command {
 
-  constructor(editor, styleDefinitions, patternDefinitions) {
+  constructor(editor, patternDefinitions) {
     super(editor);
 
     /**
@@ -25,8 +25,6 @@ export default class UiPatternsGroupCommand extends Command {
      * @member {Array.<String>} #enabledPatterns
      */
     this.set('enabledPatterns', []);
-
-    this._styleDefinitions = styleDefinitions;
     this._patternDefinitions = patternDefinitions;
   }
 
@@ -40,7 +38,7 @@ export default class UiPatternsGroupCommand extends Command {
     const dataSchema = this.editor.plugins.get('DataSchema');
 
     const value = new Set();
-    const enabledStyles = new Set();
+    // const enabledStyles = new Set();
     const enabledPatterns = new Set();
     // Block styles.
     const firstBlock = first(selection.getSelectedBlocks());
@@ -75,16 +73,16 @@ export default class UiPatternsGroupCommand extends Command {
 
           // Check if this block pattern is active.
           const ghsAttributeValue = block.getAttribute(attributeName);
-          const patternAttributeValue = block.getAttribute(attributeName);
+          // const patternAttributeValue = block.getAttribute(attributeName);
 
-          if (hasAllClasses(patternAttributeValue, definition.classes)) {
+          if (hasAllClasses(ghsAttributeValue, definition.classes)) {
             value.add(definition.name);
           }
         }
       }
     }
 
-    this.enabledPatterns = Array.from(enabledStyles).sort();
+    this.enabledPatterns = Array.from(enabledPatterns).sort();
     this.isEnabled = this.enabledPatterns.length > 0;
     this.value = this.isEnabled ? Array.from(value).sort() : [];
   }
@@ -94,8 +92,8 @@ export default class UiPatternsGroupCommand extends Command {
     const selection = model.document.selection;
     const htmlSupport = this.editor.plugins.get('GeneralHtmlSupport');
     const dataSchema = this.editor.plugins.get('DataSchema');
-
-    const definition = this._styleDefinitions.find(({name}) => name == patternName);
+    // here changement
+    const definition = this._patternDefinitions.find(({name}) => name == patternName);
 
     const shouldAddPattern = !this.value.includes(definition.name);
 
@@ -103,41 +101,44 @@ export default class UiPatternsGroupCommand extends Command {
       let selectables;
       selectables = getAffectedBlocks(selection.getSelectedBlocks(), model.schema);
       for (const selectable of selectables) {
-        const patternDefinitions = dataSchema.getDefinitionsForModel(selectable.name);
-        const patternDefinition = patternDefinitions.find(patternDefinition => (patternDefinition.model == selectable.name) && (patternDefinition.isBlock == true));
-
+        // const patternDefinitions = dataSchema.getDefinitionsForModel(selectable.name);
+        // const patternDefinition = patternDefinitions.find(patternDefinition => (patternDefinition.model == selectable.name) && (patternDefinition.isBlock == true));
+        const schemaDefinitions = dataSchema.getDefinitionsForModel(selectable.name);
+        const schemaDefinition = schemaDefinitions.find(schemaDefinition => (schemaDefinition.model == selectable.name) && (schemaDefinition.isBlock == true));
         // Get element from block name.
         // const schemaDefinitions = dataSchema.getDefinitionsForModel(selectable.name);
         // const schemaDefinition = schemaDefinitions.find(schemaDefinition => (schemaDefinition.model == selectable.name) && (schemaDefinition.isBlock == true));
 
-        if (patternDefinition === undefined) {
+        if (schemaDefinition === undefined) {
           continue;
         }
 
         if (shouldAddPattern) {
           // Fetch the template and library CSS and JS for the selected pattern.
-          const template = patternDefinition.template;
-          const css = patternDefinition.css;
-          const js = patternDefinition.js;
-
-          // Add the pattern to the block.
-          selectable.setAttribute('pattern', {
-            name: patternName,
-            template: template,
-            css: css,
-            js: js,
-          });
-          // add by yass
-          htmlSupport.setAttribute('pattern', {
-            name: patternName,
-            template: template,
-            css: css,
-            js: js,
-          });
+          // const template = patternDefinition.template;
+          // const css = patternDefinition.css;
+          // const js = patternDefinition.js;
+          //
+          // // Add the pattern to the block.
+          // selectable.setAttribute('pattern', {
+          //   name: patternName,
+          //   template: template,
+          //   css: css,
+          //   js: js,
+          // });
+          // // add by yass
+          // htmlSupport.setAttribute('pattern', {
+          //   name: patternName,
+          //   template: template,
+          //   css: css,
+          //   js: js,
+          // });
+          htmlSupport.removeModelHtmlClass(schemaDefinition.view, definition.excluded_classes, selectable);
+          htmlSupport.addModelHtmlClass(schemaDefinition.view, definition.classes, selectable);
         }
         else {
-          selectable.removeAttribute('pattern');
-          // htmlSupport.removeModelHtmlClass(schemaDefinition.view, definition.classes, selectable);
+          // selectable.removeAttribute('pattern');
+          htmlSupport.removeModelHtmlClass(schemaDefinition.view, definition.classes, selectable);
         }
       }
     });

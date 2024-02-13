@@ -1,0 +1,35 @@
+{% if variant and variant|lower != 'default' %}
+  {% set attributes = attributes.addClass('fr-content-media--' ~ variant|lower|replace({'_': '-'})) %}
+{% endif %}
+
+{% if caption or transcription %}
+  {% set attributes = attributes.setAttribute('role', 'group') %}
+{% endif %}
+
+{% if caption %}
+  {% set attributes = attributes.setAttribute('aria-label', caption) %}
+{% endif %}
+
+{% set ratio = ratio|default("16x9") %}
+
+<figure{{ attributes.addClass('fr-content-media') }}>
+  {% if image %}
+    <div class="fr-content-media__img{{ ratio != "16x9" ? ' fr-responsive-vid--'~ratio }}">
+      {{ image|add_class('fr-responsive-img') }}
+    </div>
+  {% elseif video %}
+    <div class="fr-responsive-vid{{ ratio not in ["32x9", "3x2", "3x4", "2x3"] ? ' fr-responsive-vid--'~ratio : "" }}">
+      {{ video|add_class('fr-responsive-vid__player') }}
+    </div>
+  {% endif %}
+
+  {% if caption %}
+    <figcaption class="fr-content-media__caption">{{ caption }}</figcaption>
+  {% endif %}
+
+  {% if transcription %}
+    {{ pattern('transcription', {
+      content: transcription
+    }) }}
+  {% endif %}
+</figure>

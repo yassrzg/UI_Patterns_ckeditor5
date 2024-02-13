@@ -1,0 +1,7 @@
+{% if accordions %}
+  <div{{ attributes.addClass('fr-accordions-group') }}>
+    {% for accordion in accordions %}
+      {{ accordion }}
+    {% endfor %}
+  </div>
+{% endif %}

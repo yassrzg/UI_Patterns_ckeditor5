@@ -1,0 +1,68 @@
+follow:
+  label: Newsletter & Follow us
+  description: "Allow the user to have access to the subscription to the proposed newsletter (s), and the links to the social network accounts of the entity. https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/lettre-d-info-et-reseaux-sociaux/"
+  settings:
+    title_tag:
+      type: select
+      label: HTML tag for title
+      options:
+        h2: h2
+        h3: h3 (default)
+        h4: h4
+        h5: h5
+        h6: h6
+      default: h3
+    follow_title_tag:
+      type: select
+      label: "HTML tag for 'Follow us' title"
+      options:
+        h2: h2
+        h3: h3 (default)
+        h4: h4
+        h5: h5
+        h6: h6
+      default: h3
+  fields:
+    social_title:
+      type: render
+      label: Social networks title
+      preview: "Follow us <br> on social networks"
+    newsletter_title:
+      type: text
+      label: Newsletter title
+      preview: "Subscribe to our newsletter"
+    newsletter_body:
+      type: render
+      label: Newsletter description
+      preview: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas varius tortor nibh, sit amet tempor nibh finibus et."
+    newsletter:
+      type: render
+      label: Newsletter button
+      preview:
+        type: pattern
+        id: button
+        fields:
+          label: Subscribe
+          url: "https://example.com"
+    social:
+      type: links
+      label: Social networks links
+      description: "Follow links by provider. The link element contains the following elements: id: Follow provider machine name (facebook, twitter…); title: Link title; url: Link URI."
+      preview:
+        - id: facebook
+          title: Follow on Facebook
+          url: "https://facebook.com"
+        - id: twitter
+          title: Follow on Twitter
+          url: "https://twitter.com"
+        - id: instagram
+          title: Follow on Instagram
+          url: "https://instagram.com"
+        - id: linkedin
+          title: Follow on LinkedIn
+          url: "https://www.linkedin.com"
+          attributes:
+            data-test: Test
+        - id: youtube
+          title: Follow on Youtube
+          url: "https://www.youtube.com"

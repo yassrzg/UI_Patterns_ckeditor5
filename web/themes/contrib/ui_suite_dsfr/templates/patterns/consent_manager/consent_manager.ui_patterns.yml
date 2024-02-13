@@ -1,0 +1,30 @@
+consent_manager:
+  label: Consent manager
+  description: "Allows the user to define his preferences on the use of his personal data, in particular the deposit of non-functional cookies in his browser. Used with consent_banner. https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/gestionnaire-de-consentement/"
+  category: Consent
+  fields:
+    title:
+      type: text
+      label: Title
+      description: Descriptive text for the "Accept all" / "Refuse all" options.
+      preview: Preferences for all services.
+    services:
+      type: menu
+      label: Services
+      description: "A 2 levels Drupal menu structure with attributes.id and attributes.title. 'url' key is ignored."
+      preview:
+        - title: Youtube
+          attributes:
+            id: youtube
+            title: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nulla arcu, imperdiet vel rutrum sed, dapibus et diam.
+        - title: Google
+          attributes:
+            id: google
+            title: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nulla arcu, imperdiet vel rutrum sed, dapibus et diam.
+          below:
+            - title: Google Analytics
+              attributes:
+                id: analitycs
+            - title: Google Maps
+              attributes:
+                id: maps

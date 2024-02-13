@@ -1,0 +1,46 @@
+<footer{{ attributes.addClass('fr-footer').setAttribute('role', 'contentinfo').setAttribute('id', 'footer') }}>
+   {{ top }}
+  <div class="fr-container">
+    <div class="fr-footer__body">
+      <div class="fr-footer__brand fr-enlarge-link">
+
+        {% set logo_text = logo_text|default('République\nFrançaise') %}
+
+        {% if not operator_logo %}
+          <a href="/" title="{{ 'Homepage'|t }} - {{ service_title }} - {{ logo_text }}">
+        {% endif %}
+        <p class="fr-logo">
+          {{ logo_text|nl2br }}
+        </p>
+        {% if not operator_logo %}
+          </a>
+        {% endif %}
+        {% if operator_logo %}
+          <a class="fr-footer__brand-link" href="/" title="{{ 'Homepage'|t }} - {{ operator_logo_alt ? operator_logo_alt : service_title }} - {{ logo_text }}">
+            {{ operator_logo }}
+          </a>
+        {% endif %}
+      </div>
+      {% if content or content_desc %}
+        <div class="fr-footer__content">
+          {% if content_desc %}
+          <div class="fr-footer__content-desc">{{ content_desc }}</div>
+          {% endif %}
+          {{ content }}
+        </div>
+      {% endif %}
+    </div>
+    {{ partners }}
+    {% if bottom or bottom_copy %}
+      <div class="fr-footer__bottom">
+        {{ bottom }}
+        {% if bottom_copy %}
+        <div class="fr-footer__bottom-copy">
+          <div>{{ bottom_copy }}</div>
+        </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</footer>
+

@@ -17,7 +17,7 @@ export default class UiPatternsGroupUI extends Plugin {
     const editor = this.editor;
     const componentFactory = editor.ui.componentFactory;
     const t = Drupal.t;
-    const options = editor.config.get('uiPatternsGroup.options');
+    const options = editor.config.get('UiPatternsGroup.options');
 
     // Prepare pattern buttons.
     options.forEach(pattern => {
@@ -26,7 +26,7 @@ export default class UiPatternsGroupUI extends Plugin {
 
     componentFactory.add('UiPatternsGroup', locale => {
       const dropdownView = createDropdown(locale);
-      const uiPatternsGroupCommand = editor.commands.get('uiPatternsGroup');
+      const uiPatternsGroupCommand = editor.commands.get('UiPatternsGroup');
 
       // The entire dropdown will be disabled together with the command (e.g.
       // when the editor goes read-only).
@@ -85,7 +85,7 @@ export default class UiPatternsGroupUI extends Plugin {
 
     editor.ui.componentFactory.add(`UiPatternsGroup:${pattern.id}`, locale => {
       const patternItemDefinitions = new Collection();
-      const uiPatternsGroupCommand = editor.commands.get('uiPatternsGroup');
+      const uiPatternsGroupCommand = editor.commands.get('UiPatternsGroup');
 
       // Loop on pattern options.
       pattern.options.forEach(pattern_option => {
@@ -93,7 +93,7 @@ export default class UiPatternsGroupUI extends Plugin {
         const patternDef = {
           type: 'button',
           model: new Model({
-            commandName: 'uiPatternsGroup',
+            commandName: 'UiPatternsGroup',
             commandParam: normalizedPatternOptionName,
             label: pattern_option.name,
             withText: true,

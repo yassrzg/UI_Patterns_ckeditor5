@@ -1,0 +1,58 @@
+alert:
+  label: Alert
+  description: Draws the user's attention to information without interrupting his current task. https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/alerte
+  variants:
+    error:
+      label: Error
+    success:
+      label: Success
+    info:
+      label: Information
+    warning:
+      label: Warning
+    error__sm:
+      label: Error small
+    success__sm:
+      label: Success small
+    info__sm:
+      label: Information small
+    warning__sm:
+      label: Warning small
+  settings:
+    dismissible:
+      type: select
+      label: Dismissible?
+      description: It’s possible to dismiss any alert inline.
+      options:
+        "": No
+        core: Using dsfr
+        custom: Custom
+      preview: core
+    close_title:
+      type: token
+      label: Close button text
+      description: Optional. Will be used only if alert is dismissible.
+      preview: Hide message
+    title_tag:
+      type: select
+      label: HTML tag for title
+      options:
+        p: p
+        h2: h2
+        h3: h3 (default)
+        h4: h4
+        h5: h5
+        h6: h6
+      default: h3
+  fields:
+    title:
+      type: text
+      label: Title
+      preview: "Alert: Title of an alert"
+    message:
+      type: render
+      label: Message
+      preview:
+        type: html_tag
+        tag: p
+        value: Detailed description of the message.
