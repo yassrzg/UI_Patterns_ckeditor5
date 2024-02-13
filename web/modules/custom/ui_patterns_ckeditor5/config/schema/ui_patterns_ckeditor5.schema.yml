@@ -1,0 +1,21 @@
+ui_patterns_ckeditor5_ckeditor5_plugin:
+  type: mapping
+  label: 'UI Patterns'
+  mapping:
+    enabled_patterns:
+      type: sequence
+      label: 'Enabled patterns'
+      constraints:
+        NotBlank:
+          message: 'Enable at least one patterns, otherwise disable the UI Patterns button.'
+      sequence:
+        type: string
+        label: 'Pattern'
+
+ckeditor5.plugin.ui_patterns_ckeditor5_uiPatternsGroup:
+  type: ui_patterns_ckeditor5_ckeditor5_plugin
+  label: 'UI Patterns (group)'
+
+#ckeditor5.plugin.ui_patterns_ckeditor5_uiPatternSingle:
+#  type: ui_patterns_ckeditor5_ckeditor5_plugin
+#  label: 'UI Pattern (single)'

@@ -1,0 +1,8 @@
+name: 'UI Patterns CKEditor5'
+type: module
+description: 'Allows to use patterns in CKEditor5.'
+core_version_requirement: ^10.1
+package: 'User interface'
+dependencies:
+  - ui_patterns:ui_patterns
+  - drupal:ckeditor5

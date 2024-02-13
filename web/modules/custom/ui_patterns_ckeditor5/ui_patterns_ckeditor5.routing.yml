@@ -1,0 +1,20 @@
+#ui_patterns_library.ui_patterns_ckeditor_api_get_all_patterns:
+#  path: '/api/ui-patterns'
+#  defaults:
+#    _controller: '\Drupal\ui_patterns_ckeditor5\Controller\UiPatternsCkeditorApi::getAllPatterns'
+#    _title: 'Get All UI Patterns'
+#  requirements:
+#    _role: 'administrator'
+#  methods: [GET]
+
+
+
+# test for see what i get in def :
+
+#ui_patterns_library.ui_pattern_ckeditor_api_get_definitions:
+#  path: '/api/definitions-patterns'
+#  defaults:
+#    _controller: 'Drupal\ui_pattern_ckeditor5\Plugin\CKEditor5Plugin\UiPatternBase::buildConfigurationForm'
+#    _title: 'Get All Définitions of Patterns'
+#  requirements:
+#    _role: 'administrator'

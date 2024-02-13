@@ -1,0 +1,27 @@
+internal.ckeditor5.ui_patterns_group:
+  css:
+    theme:
+      assets/css/ui_patterns_ckeditor5_group.editor.css: {}
+  js:
+    js/build/uiPatternGroup.js: { preprocess: false, minified: true }
+  dependencies:
+    - core/ckeditor5
+
+internal.ckeditor5.ui_patterns_single:
+  css:
+    theme:
+      assets/css/ui_patterns_ckeditor5_single.editor.css: {}
+  js:
+    js/build/uiPatternsSingle.js: { preprocess: false, minified: true }
+  dependencies:
+    - core/ckeditor5
+
+internal.ckeditor5.ui_patterns_group.admin:
+  css:
+    theme:
+      assets/css/ui_patterns_ckeditor5_group.admin.css: {}
+
+internal.ckeditor5.ui_patterns_single.admin:
+  css:
+    theme:
+      assets/css/ui_patterns_ckeditor5_single.admin.css: {}
