@@ -1,6 +1,6 @@
-import {Plugin} from 'ckeditor5/src/core';
 import UiPatternsGroupEditing from './uipatternsgroupediting';
 import UiPatternsGroupUI from './uipatternsgroupui';
+import {Plugin} from 'ckeditor5/src/core';
 
 export default class UiPatternsGroup extends Plugin {
 
