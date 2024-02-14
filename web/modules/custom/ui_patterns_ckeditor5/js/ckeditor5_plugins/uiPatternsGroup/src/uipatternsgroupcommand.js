@@ -26,6 +26,7 @@ export default class UiPatternsGroupCommand extends Command {
      */
     this.set('enabledPatterns', []);
     this._patternDefinitions = patternDefinitions;
+    console.log(this._patternDefinitions);
   }
 
   /**
@@ -88,13 +89,16 @@ export default class UiPatternsGroupCommand extends Command {
   }
 
   execute({patternName}) {
+    console.log('execute');
+    console.log('patternName:', patternName);
     const model = this.editor.model;
     const selection = model.document.selection;
     const htmlSupport = this.editor.plugins.get('GeneralHtmlSupport');
     const dataSchema = this.editor.plugins.get('DataSchema');
     // here changement
-    const definition = this._patternDefinitions.find(({name}) => name == patternName);
-
+    console.log('this._patternDefinitions:', this._patternDefinitions);
+    const definition = this._patternDefinitions.find(({ name }) => name.startsWith(patternName));
+    console.log(definition, 'definition');
     const shouldAddPattern = !this.value.includes(definition.name);
 
     model.change(() => {

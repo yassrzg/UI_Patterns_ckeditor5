@@ -56,9 +56,11 @@ abstract class PatternBase extends PluginBase implements PatternInterface, Conta
    */
   public function getThemeImplementation() {
     $definition = $this->getPluginDefinition();
+//    dd($definition);
     $item = [];
     $item += $this->processVariables($definition);
     $item += $this->processUseProperty($definition);
+//    dd($item);
     return [
       $definition['theme hook'] => $item,
     ];
@@ -89,6 +91,7 @@ abstract class PatternBase extends PluginBase implements PatternInterface, Conta
       $libraries[$id . '.' . key($value)] = reset($value);
     });
 
+    dd($libraries);
     // @codingStandardsIgnoreEnd
     return $libraries;
   }
