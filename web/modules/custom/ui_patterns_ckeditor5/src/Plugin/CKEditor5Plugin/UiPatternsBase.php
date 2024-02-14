@@ -164,6 +164,7 @@ abstract class UiPatternsBase extends CKEditor5PluginDefault implements CKEditor
         if ($form_state->get(self::MULTIPLE_GROUPS_KEY) && $definition) {
           $group_key = $this->getMachineName($definition->getCategory());
 
+
           if (!isset($form['enabled_patterns'][$group_key])) {
             $form['enabled_patterns'][$group_key] = [
               '#type' => 'details',
@@ -182,7 +183,6 @@ abstract class UiPatternsBase extends CKEditor5PluginDefault implements CKEditor
         }
       }
     }
-
     return $form;
   }
 
@@ -239,31 +239,43 @@ abstract class UiPatternsBase extends CKEditor5PluginDefault implements CKEditor
     $config = $static_plugin_config;
     $enabled_styles = $this->configuration['enabled_patterns'];
 
+
     foreach ($enabled_styles as $plugin_id) {
       $definition = $this->patternsManager->getDefinition($plugin_id, FALSE);
+//      print_r($definition);
       if ($definition == NULL) {
         continue;
       }
+      $basePath = $definition->getBasePath();
+      $fileName = $definition->getFileName();
+      $template = $definition->getTemplate();
+//      print_r($basePath);
+//      print_r($fileName);
+//      print_r($template);
 
-      $style_options = $definition->getFields();
-      $style_options_keys = \array_keys($style_options);
-      $cke5_style_options = [];
-      foreach ($style_options as $classes => $option_label) {
+      $pattern_options = $definition->getFields();
+//      print_r($pattern_options);
+      $pattern_options_keys = \array_keys($pattern_options);
+      $cke5_pattern_options = [];
+      foreach ($pattern_options as $classes => $option_label) {
         $cke5_classes = \explode(' ', $classes);
-        $cke5_style_options[] = [
+        $cke5_pattern_options[] = [
           'name' => $option_label,
           'classes' => $cke5_classes,
-          'excluded_classes' => $this->getExcludedClasses($style_options_keys, $cke5_classes),
+          'excluded_classes' => $this->getExcludedClasses($pattern_options_keys, $cke5_classes),
         ];
       }
 
       $config[$this->ckeditor5ConfigKey]['options'][] = [
         'id' => $plugin_id,
         'label' => $definition->getLabel(),
-        'options' => $cke5_style_options,
+        'options' => $cke5_pattern_options,
+        'basePath' => $basePath,
+        'fileName' => $fileName,
+        'template' => $template,
       ];
     }
-
+//    print_r($config);
     return $config;
   }
 
