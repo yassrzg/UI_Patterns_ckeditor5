@@ -25,8 +25,10 @@ export default class UiPatternsGroupCommand extends Command {
      * @member {Array.<String>} #enabledPatterns
      */
     this.set('enabledPatterns', []);
+
     this._patternDefinitions = patternDefinitions;
-    console.log(this._patternDefinitions);
+    patternDefinitions = editor.config.get('UiPatternsGroup.options');
+    console.log(patternDefinitions, 'patternDefinitions');
   }
 
   /**
@@ -89,68 +91,105 @@ export default class UiPatternsGroupCommand extends Command {
   }
 
   execute({patternName}) {
-    console.log('execute');
-    console.log('patternName:', patternName);
+    console.log(patternName, 'patternName');
     const model = this.editor.model;
     const selection = model.document.selection;
     const htmlSupport = this.editor.plugins.get('GeneralHtmlSupport');
     const dataSchema = this.editor.plugins.get('DataSchema');
-    // here changement
-    console.log('this._patternDefinitions:', this._patternDefinitions);
+    console.log(dataSchema, 'dataSchema');
+
     const definition = this._patternDefinitions.find(({ name }) => name.startsWith(patternName));
     console.log(definition, 'definition');
     const shouldAddPattern = !this.value.includes(definition.name);
 
-    model.change(() => {
-      let selectables;
-      selectables = getAffectedBlocks(selection.getSelectedBlocks(), model.schema);
-      for (const selectable of selectables) {
-        // const patternDefinitions = dataSchema.getDefinitionsForModel(selectable.name);
-        // const patternDefinition = patternDefinitions.find(patternDefinition => (patternDefinition.model == selectable.name) && (patternDefinition.isBlock == true));
-        const schemaDefinitions = dataSchema.getDefinitionsForModel(selectable.name);
-        const schemaDefinition = schemaDefinitions.find(schemaDefinition => (schemaDefinition.model == selectable.name) && (schemaDefinition.isBlock == true));
-        // Get element from block name.
-        // const schemaDefinitions = dataSchema.getDefinitionsForModel(selectable.name);
-        // const schemaDefinition = schemaDefinitions.find(schemaDefinition => (schemaDefinition.model == selectable.name) && (schemaDefinition.isBlock == true));
+    if (!definition) {
+      console.error(`Pattern definition not found for ${patternName}`);
+      return;
+    }
 
-        if (schemaDefinition === undefined) {
+    // const shouldAddPattern = !this.value.includes(definition.id);
+
+    model.change(() => {
+      const selectables = getAffectedBlocks(selection.getSelectedBlocks(), model.schema);
+
+      for (const selectable of selectables) {
+        const schemaDefinitions = dataSchema.getDefinitionsForModel(selectable.name);
+        const schemaDefinition = schemaDefinitions.find(
+          (schemaDefinition) => schemaDefinition.model === selectable.name && schemaDefinition.isBlock === true
+        );
+
+        if (!schemaDefinition) {
           continue;
         }
 
         if (shouldAddPattern) {
-          // Fetch the template and library CSS and JS for the selected pattern.
-          // const template = patternDefinition.template;
-          // const css = patternDefinition.css;
-          // const js = patternDefinition.js;
-          //
-          // // Add the pattern to the block.
-          // selectable.setAttribute('pattern', {
-          //   name: patternName,
-          //   template: template,
-          //   css: css,
-          //   js: js,
-          // });
-          // // add by yass
-          // htmlSupport.setAttribute('pattern', {
-          //   name: patternName,
-          //   template: template,
-          //   css: css,
-          //   js: js,
-          // });
+          // Check if definition.fileName is defined
+          // if (!definition.fileName) {
+          //   console.error('definition.fileName is undefined');
+          //   return;
+          // }
+
+          fetch('/api/ui-patterns')
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log(data, 'data');
+              // Assuming data is an array of pattern objects with a 'path' property
+              const patternPath = data.find((path) => path.endsWith(patternName));
+              // const pattern = data.find((pattern) => pattern.path && pattern.path.includes(patternName));
+              // console.log(patternPath, 'pattern');
+
+              if (!patternPath) {
+                console.log('Pattern not found');
+                throw new Error(`Pattern ${patternName} not found`);
+              }
+
+              // Now you have the specific pattern, you can fetch the Twig template
+              fetch(`/api/ui-patterns/${patternName}/content`)
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                  }
+                  return response.json();
+                })
+                .then((data) => {
+                  // The content of the file is now in the "data.content" variable
+                  console.log(data.content, 'hello end');
+
+                  // Insert the content into CKEditor5
+                  // const editorInstance = ...; // Get your CKEditor5 instance here
+                  // editorInstance.setData(data.content);
+                })
+                .catch((error) => console.error(error));
+            })
+            .catch((error) => console.error(error));
+
           htmlSupport.removeModelHtmlClass(schemaDefinition.view, definition.excluded_classes, selectable);
           htmlSupport.addModelHtmlClass(schemaDefinition.view, definition.classes, selectable);
-        }
-        else {
-          // selectable.removeAttribute('pattern');
+        } else {
           htmlSupport.removeModelHtmlClass(schemaDefinition.view, definition.classes, selectable);
         }
       }
     });
   }
 }
+function getPatternPathByPatternName(patternName) {
+  // Exemple d'implémentation basée sur les chemins fournis
+  const patternPaths = [
+    "/var/www/html/d10_ckeditor5/web/themes/contrib/ui_suite_dsfr/templates/patterns/accordion/pattern-accordion",
+    // Ajoutez d'autres chemins selon votre besoin
+  ];
 
+  const patternPath = patternPaths.find((path) => path.includes(patternName));
+  return patternPath;
+}
 // Verifies if all classes are present in the given GHS attribute.
 function hasAllClasses(ghsAttributeValue, classes) {
+
   if (!ghsAttributeValue || !ghsAttributeValue.classes) {
     return false;
   }
@@ -173,6 +212,6 @@ function getAffectedBlocks(selectedBlocks, schema) {
       blocks.add(block);
     }
   }
-
+  console.log(blocks, 'blocks');
   return blocks;
 }
