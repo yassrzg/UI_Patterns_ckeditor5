@@ -2,6 +2,7 @@
 
 namespace Drupal\ui_patterns_ckeditor5\Controller;
 
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\ui_patterns\Definition\PatternDefinition;
 use Drupal\ui_patterns\UiPatterns;
@@ -213,14 +214,76 @@ class UiPatternsCkeditorApi extends ControllerBase {
 
   public function getPatternContent($patternName) {
     $patternPath = "/var/www/html/d10_ckeditor5/web/themes/contrib/ui_suite_dsfr/templates/patterns/{$patternName}/pattern-{$patternName}.html.twig";
+    $ymlPath = "/var/www/html/d10_ckeditor5/web/themes/contrib/ui_suite_dsfr/templates/patterns/{$patternName}/{$patternName}.ui_patterns.yml";
 
     if (!file_exists($patternPath)) {
       return new JsonResponse(['error' => "Pattern {$patternName} not found"], 404);
     }
+    if (!file_exists($ymlPath)) {
+      return new JsonResponse(['error' => "Pattern {$patternName} not found"], 404);
+    }
+    $yamlContent = file_get_contents($ymlPath);
+    $config = Yaml::decode($yamlContent);
+    $variables = $this->flattenConfigArray($config);
+//    dd($variables);
 
+
+    $grouped_plugin_definitions = $this->patternsManager->getSortedDefinitions();
+//    dd($grouped_plugin_definitions);
+    // Rendre le modèle Twig et le convertir en HTML
+//    $html = \Drupal::service('twig')->render($patternPath);
+//    dd($html);
+//    $template = file_get_contents($patternPath);
+//
+//    // Define the variables for the Twig template
+//    $variables = [
+//      'title' => 'Your title',
+//      'content' => 'Your content',
+//      'expanded' => true,
+//    ];
+//
+//    // Render the Twig template and convert it to HTML
+//    $html = \Drupal::service('twig')->renderInline($template, $variables);
     $content = file_get_contents($patternPath);
+//    dd($content);
+    $cleanedContent = $this->cleanTwigContent($content);
+//    dd($cleanedContent);
+
 
     return new JsonResponse(['content' => $content]);
+  }
+  private function cleanTwigContent($content) {
+    // Supprimer les blocs {% ... %}
+    $content = preg_replace('/{%.*?%}/', '', $content);
+
+    // Supprimer les blocs {{ ... }}
+    $content = preg_replace('/{{.*?}}/', '', $content);
+
+    return $content;
+  }
+
+
+  private function flattenConfigArray(array $config, array $keys = []) {
+    $flattened = [];
+
+    foreach ($config as $key => $value) {
+      $currentKeys = array_merge($keys, [$key]);
+
+      if (is_array($value)) {
+        $flattened = array_merge($flattened, $this->flattenConfigArray($value, $currentKeys));
+      } else {
+        // Concaténer les clés pour former une clé unique dans le tableau $variables
+        $variableKey = implode('_', $currentKeys);
+
+        // Remplacer les caractères invalides pour former une clé valide en PHP
+        $variableKey = preg_replace('/[^A-Za-z0-9_]/', '', $variableKey);
+
+        // Ajouter la paire clé-valeur au tableau $flattened
+        $flattened[$variableKey] = $value;
+      }
+    }
+
+    return $flattened;
   }
 
 }

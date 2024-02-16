@@ -10,7 +10,8 @@ ui_patterns_ckeditor5_uiPatternsGroup:
       UiPatternsGroup:
         label: 'UI Patterns (group)'
     elements:
-      - <$any-html5-element class>
+      - <$any-html5-element class attributes>
+
 
 #ui_styles_ckeditor5_uiStylesInline:
 #  ckeditor5:

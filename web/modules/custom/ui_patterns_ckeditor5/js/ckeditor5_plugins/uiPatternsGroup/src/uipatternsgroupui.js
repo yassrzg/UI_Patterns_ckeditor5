@@ -18,6 +18,25 @@ export default class UiPatternsGroupUI extends Plugin {
     const componentFactory = editor.ui.componentFactory;
     const t = Drupal.t;
     const options = editor.config.get('UiPatternsGroup.options');
+    // let allowedAttributes = [
+    //   'id',
+    //   'class',
+    //   'aria-expanded',
+    //   'aria-controls',
+    //   'type',
+    //   'button',
+    //   'span',
+    // ];
+    //
+    // editor.model.schema.extend('$root', { allowAttributes: allowedAttributes });
+    // editor.model.schema.extend('$block', { allowAttributes: allowedAttributes });
+    // editor.model.schema.extend('$text', { allowAttributes: allowedAttributes });
+
+
+    // for (var i = 0; i < allowedAttributes.length; i++) {
+    //   editor.conversion.attributeToAttribute({ model: allowedAttributes[i], view: allowedAttributes[i] });
+    // }
+
     console.log(options, 'options');
 
     // Prepare pattern buttons.

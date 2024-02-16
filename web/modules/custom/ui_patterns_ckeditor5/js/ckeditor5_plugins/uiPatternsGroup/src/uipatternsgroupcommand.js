@@ -3,6 +3,7 @@
 import {Command} from 'ckeditor5/src/core';
 import {first} from 'ckeditor5/src/utils';
 
+
 export default class UiPatternsGroupCommand extends Command {
 
   constructor(editor, patternDefinitions) {
@@ -158,7 +159,50 @@ export default class UiPatternsGroupCommand extends Command {
                 })
                 .then((data) => {
                   // The content of the file is now in the "data.content" variable
-                  console.log(data.content, 'hello end');
+                  console.log('Contenu brut du modèle Twig :', data.content);
+
+                  let content = data.content;
+                  // Remplacez les balises <button> par des balises <span>
+                  // content = content.replace(/<button\b([^>]*)>/g, '<span$1>');
+                  // content = content.replace(/<\/button>/g, '</span>');
+                  // const match = content.match(/attributes\.add(class|Class)\(['"]([^'"]+)['"]\)/i);
+
+                  // const parser = new DOMParser();
+                  // const doc = parser.parseFromString(content, 'text/html');
+                  // console.log(doc, 'doc');
+                  // // Récupération de toutes les balises dans l'objet DOM
+                  // const allElements = doc.querySelectorAll('*');
+                  //
+                  // // Parcours de chaque balise et récupération des informations
+                  // allElements.forEach((element) => {
+                  //   const tagName = element.tagName.toLowerCase(); // Nom de la balise en minuscules
+                  //   const attributes = Array.from(element.attributes).map((attr) => ({
+                  //     name: attr.name,
+                  //     value: attr.value,
+                  //   }));
+                  //   const content = element.innerHTML;
+                  //
+                  //   // Vous pouvez maintenant utiliser ces informations comme nécessaire
+                  //   console.log('Balise:', tagName);
+                  //   console.log('Attributs:', attributes);
+                  //   console.log('Contenu:', content);
+                  // });
+                  // console.log(content,'content2');
+                  const twigData = {
+                    expanded: true,
+                    title: 'Mon Titre',
+                    content: 'Mon contenu',
+                  }
+                  const Twig = require('twig');
+                  const renderedHtml = Twig.twig({ data: content }).render(twigData);
+
+                  const editorInstance = this.editor;
+
+                  console.log('Contenu rendu par Twig :', renderedHtml);
+                  editorInstance.setData(renderedHtml, true);
+
+
+
 
                   // Insert the content into CKEditor5
                   // const editorInstance = ...; // Get your CKEditor5 instance here
