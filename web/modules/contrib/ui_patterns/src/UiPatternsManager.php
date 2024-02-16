@@ -139,7 +139,7 @@ class UiPatternsManager extends DefaultPluginManager implements UiPatternsManage
       $id2 = \str_replace('_', '', $item2->id());
       return \strnatcasecmp($id1, $id2);
     });
-
+//    dd($definitions);
     return $definitions;
   }
 
@@ -191,6 +191,7 @@ class UiPatternsManager extends DefaultPluginManager implements UiPatternsManage
     foreach ($this->getDefinitions() as $definition) {
       $patterns[] = $this->getFactory()->createInstance($definition->id());
     }
+//    dd($patterns);
     return $patterns;
   }
 

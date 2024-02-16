@@ -163,8 +163,8 @@ export default class UiPatternsGroupCommand extends Command {
 
                   let content = data.content;
                   // Remplacez les balises <button> par des balises <span>
-                  // content = content.replace(/<button\b([^>]*)>/g, '<span$1>');
-                  // content = content.replace(/<\/button>/g, '</span>');
+                  content = content.replace(/<button\b([^>]*)>/g, '<span$1>');
+                  content = content.replace(/<\/button>/g, '</span>');
                   // const match = content.match(/attributes\.add(class|Class)\(['"]([^'"]+)['"]\)/i);
 
                   // const parser = new DOMParser();
@@ -188,19 +188,19 @@ export default class UiPatternsGroupCommand extends Command {
                   //   console.log('Contenu:', content);
                   // });
                   // console.log(content,'content2');
-                  const twigData = {
-                    expanded: true,
-                    title: 'Mon Titre',
-                    content: 'Mon contenu',
-                  }
-                  const Twig = require('twig');
-                  const renderedHtml = Twig.twig({ data: content }).render(twigData);
+                  // const twigData = {
+                  //   expanded: true,
+                  //   title: 'Mon Titre',
+                  //   content: 'Mon contenu',
+                  // }
+                  // const Twig = require('twig');
+                  // const renderedHtml = Twig.twig({ data: content }).render(twigData);
 
                   const editorInstance = this.editor;
 
-                  console.log('Contenu rendu par Twig :', renderedHtml);
-                  editorInstance.setData(renderedHtml, true);
-
+                  // console.log('Contenu rendu par Twig :', renderedHtml);
+                  editorInstance.setData(content, true);
+                  console.log(editorInstance.setData(content, true), 'editorInstance.setData(content, true)');
 
 
 

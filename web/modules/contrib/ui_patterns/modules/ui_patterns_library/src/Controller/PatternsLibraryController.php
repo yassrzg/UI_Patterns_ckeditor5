@@ -85,12 +85,13 @@ class PatternsLibraryController extends ControllerBase {
             '#theme' => 'patterns_meta_information',
             '#pattern' => $definition->toArray(),
           ],
-          'rendered' => $this->getPatternRenderArray($definition),
+          'rendered' => dd($this->getPatternRenderArray($definition), 'rendered'),
           'definition' => $definition->toArray(),
         ];
       }
     }
 
+  dd($patterns);
     return [
       '#theme' => 'patterns_overview_page',
       '#patterns' => $patterns,

@@ -62,6 +62,7 @@ class FieldTemplateProcessor implements FieldTemplateProcessorInterface {
       $value = $this->getEntity()->get($this->getFieldName())->getValue();
       $value = $value[$delta][$column];
     }
+
     return $value;
   }
 

@@ -36,6 +36,7 @@ function ui_patterns_library_info_build(): array {
   foreach (UiPatterns::getManager()->getPatterns() as $pattern) {
     $definitions += $pattern->getLibraryDefinitions();
   }
+
   return $definitions;
 }
 

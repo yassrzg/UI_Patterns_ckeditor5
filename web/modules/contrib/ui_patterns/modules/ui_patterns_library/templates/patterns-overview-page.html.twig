@@ -37,6 +37,7 @@
 
   {% for group_patterns in patterns %}
     {% for pattern_name, pattern in group_patterns %}
+
       <div class="pattern-preview pattern-preview__{{ pattern.definition.id }}" id="{{ pattern_name }}">
         {{ pattern.meta }}
 
@@ -58,3 +59,4 @@
     {% endfor %}
   {% endfor %}
 {% endif %}
+

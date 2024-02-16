@@ -249,7 +249,7 @@ abstract class UiStylesBase extends CKEditor5PluginDefault implements CKEditor5P
         'options' => $cke5_style_options,
       ];
     }
-
+//    print_r($config);
     return $config;
   }
 

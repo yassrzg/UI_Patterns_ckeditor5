@@ -130,6 +130,7 @@ class LibraryDeriver extends AbstractYamlPatternsDeriver {
         $host_extension = $this->getHostExtension($file_path);
         if ($host_extension == FALSE || $host_extension == $provider) {
           $content = file_get_contents($file_path);
+//          dd(Yaml::decode($content));
           foreach (Yaml::decode($content) as $id => $definition) {
             $definition['id'] = $id;
             $definition['base path'] = dirname($file_path);
@@ -140,7 +141,7 @@ class LibraryDeriver extends AbstractYamlPatternsDeriver {
         }
       }
     }
-
+//    dd($patterns);
     return $patterns;
   }
 

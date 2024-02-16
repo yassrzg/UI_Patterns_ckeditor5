@@ -1,0 +1,6 @@
+libraries_ui:
+  title: 'Libraries'
+  description: 'Provide all libraries information available.'
+  parent: system.admin_reports
+  route_name: libraries_ui.overview
+  weight: 100

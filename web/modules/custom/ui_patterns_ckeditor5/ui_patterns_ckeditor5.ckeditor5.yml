@@ -13,6 +13,7 @@ ui_patterns_ckeditor5_uiPatternsGroup:
       - <$any-html5-element class attributes>
 
 
+
 #ui_styles_ckeditor5_uiStylesInline:
 #  ckeditor5:
 #    plugins: [uiStylesInline.UiStylesInline]

@@ -69,7 +69,6 @@ class Pattern extends RenderElement {
     foreach (UiPatterns::getPatternDefinition($element['#id'])->getLibrariesNames() as $library) {
       $element['#attached']['library'][] = $library;
     }
-
     return $element;
   }
 
@@ -175,6 +174,7 @@ class Pattern extends RenderElement {
         }
       }
     }
+//    var_dump($element);
     return $element;
   }
 

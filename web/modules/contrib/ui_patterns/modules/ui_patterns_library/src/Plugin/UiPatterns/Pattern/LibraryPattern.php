@@ -59,6 +59,7 @@ class LibraryPattern extends PatternBase {
     $definition = $this->getPluginDefinition();
     $item[$definition['theme hook']] += $this->processTemplateProperty($definition);
     $item[$definition['theme hook']] += $this->processCustomThemeHookProperty($definition);
+//    dd($item[$definition['theme hook']]);
     return $item;
   }
 

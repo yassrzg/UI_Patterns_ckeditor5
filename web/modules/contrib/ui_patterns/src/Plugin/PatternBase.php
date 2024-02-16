@@ -91,7 +91,7 @@ abstract class PatternBase extends PluginBase implements PatternInterface, Conta
       $libraries[$id . '.' . key($value)] = reset($value);
     });
 
-    dd($libraries);
+//    var_dump($libraries);
     // @codingStandardsIgnoreEnd
     return $libraries;
   }

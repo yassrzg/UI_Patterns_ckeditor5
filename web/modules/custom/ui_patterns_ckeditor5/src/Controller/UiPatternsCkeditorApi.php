@@ -5,6 +5,8 @@ namespace Drupal\ui_patterns_ckeditor5\Controller;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\ui_patterns\Definition\PatternDefinition;
+use Drupal\ui_patterns\Element\PatternContext;
+use Drupal\ui_patterns\Element\PatternPreview;
 use Drupal\ui_patterns\UiPatterns;
 use Drupal\ui_patterns\UiPatternsManager;
 use Drupal\ui_patterns\UiPatternsManagerInterface;
@@ -173,7 +175,7 @@ class UiPatternsCkeditorApi extends ControllerBase {
 //        dd($libraryDefinitions);
 //      }
 //    }
-    // GETTING ACTIVE THEME
+//     GETTING ACTIVE THEME
 //    $theme = \Drupal::theme()
 //      ->getActiveTheme();
 //    dd($theme);
@@ -183,6 +185,21 @@ class UiPatternsCkeditorApi extends ControllerBase {
 //      ->getName();
 //    $installed_atjs = \Drupal::service('library.discovery')->getLibrariesByExtension($theme);
 //    dd($installed_atjs);
+
+//    /** @var \Drupal\ui_patterns\Plugin\PatternBase $pattern */
+//    $items = [
+//      'patterns_destination' => [
+//        'variables' => ['sources' => NULL, 'context' => NULL],
+//      ],
+//      'patterns_use_wrapper' => [
+//        'variables' => ['use' => NULL],
+//      ],
+//    ];
+//
+//    foreach (UiPatterns::getManager()->getPatterns() as $pattern) {
+//      $items += $pattern->getThemeImplementation();
+//    }
+//    dd($items);
     return new JsonResponse($patternPaths);
   }
 
@@ -213,45 +230,146 @@ class UiPatternsCkeditorApi extends ControllerBase {
 
 
   public function getPatternContent($patternName) {
-    $patternPath = "/var/www/html/d10_ckeditor5/web/themes/contrib/ui_suite_dsfr/templates/patterns/{$patternName}/pattern-{$patternName}.html.twig";
-    $ymlPath = "/var/www/html/d10_ckeditor5/web/themes/contrib/ui_suite_dsfr/templates/patterns/{$patternName}/{$patternName}.ui_patterns.yml";
+
+    $uiPatternsManager = \Drupal::service('plugin.manager.ui_patterns');
+    $patternDefinitions = $uiPatternsManager->getDefinitions();
+//    dd($patternDefinitions);
+//    foreach ($patternDefinitions as $patternId => $patternDefinition) {
+//      // Assuming that $element is a suitable array for processing.
+//      $element = ['#id' => $patternId];
+//      $processedElement = PatternPreview::processFields($element);
+////      dd($processedElement);
+//    }
+//
+//
+//    foreach ($patternDefinitions as $patternId => $patternDefinition) {
+//      $element = ['#id' => $patternId];
+//      $definition = UiPatterns::getPatternDefinition($element['#id']);
+//      $element['#context'] = new PatternContext('preview');
+//      dd($element, 'element');
+//
+//      $fields = [];
+//      foreach ($definition->getFields() as $field) {
+//        $preview = $field->getPreview();
+//        // Some fields are used as Twig array keys and don't need escaping.
+////      if ($field->getEscape()) {
+////        // The examples are not user submitted and are safe markup.
+////        $preview = self::getPreviewMarkup($preview);
+////      }
+////      $fields[$field->getName()] = $preview;
+//
+//      }
+//      dd($preview, 'preview');
+//    }
+
+
+
+    if (isset($patternDefinitions[$patternName])) {
+      $patternDefinition = $patternDefinitions[$patternName];
+      $basePath = $patternDefinition->getBasePath();
+      $patternPath = $basePath . '/' . $patternDefinition->getTemplate() . '.html.twig';
+
+    } else {
+      // Gérer le cas où le motif spécifié n'a pas été trouvé
+      dd("Le motif '$patternName' n'a pas été trouvé.");
+    }
 
     if (!file_exists($patternPath)) {
       return new JsonResponse(['error' => "Pattern {$patternName} not found"], 404);
     }
-    if (!file_exists($ymlPath)) {
-      return new JsonResponse(['error' => "Pattern {$patternName} not found"], 404);
-    }
-    $yamlContent = file_get_contents($ymlPath);
-    $config = Yaml::decode($yamlContent);
-    $variables = $this->flattenConfigArray($config);
-//    dd($variables);
 
 
-    $grouped_plugin_definitions = $this->patternsManager->getSortedDefinitions();
-//    dd($grouped_plugin_definitions);
-    // Rendre le modèle Twig et le convertir en HTML
-//    $html = \Drupal::service('twig')->render($patternPath);
-//    dd($html);
-//    $template = file_get_contents($patternPath);
-//
-//    // Define the variables for the Twig template
-//    $variables = [
-//      'title' => 'Your title',
-//      'content' => 'Your content',
-//      'expanded' => true,
-//    ];
-//
-//    // Render the Twig template and convert it to HTML
-//    $html = \Drupal::service('twig')->renderInline($template, $variables);
+
     $content = file_get_contents($patternPath);
 //    dd($content);
-    $cleanedContent = $this->cleanTwigContent($content);
-//    dd($cleanedContent);
 
 
-    return new JsonResponse(['content' => $content]);
+    if (isset($patternDefinitions[$patternName])) {
+      $patternDefinition = $patternDefinitions[$patternName];
+      $fields = $patternDefinition->getFields();
+      $fieldKeys = array_keys($fields);
+      foreach ($fieldKeys as $key) {
+        if ($key === 'image') {
+          $module_path= \Drupal::service('extension.path.resolver')->getPath('module', 'ui_patterns_ckeditor5');
+          $image_path = $module_path . '/assets/image/images.webp';
+          $image_url = \Drupal::service('file_url_generator')->generateAbsoluteString($image_path);
+          $fieldValues[$key] = $image_url;
+        } else {
+          $fieldValues[$key] = 'default value';
+        }
+      }
+
+    } else {
+      return new JsonResponse(['error' => "Pattern {$patternName} not found"], 404);
+    }
+//    dd($fieldValues, 'fieldValues');
+//    dd($fieldValues);
+    $loader = new \Twig\Loader\ArrayLoader([$patternDefinition->getTemplate() => $content]);
+    $twig = new \Twig\Environment($loader);
+
+// Get the service from the Drupal container.
+    $extension = \Drupal::service('ui_patterns_ckeditor5.twig.extension');
+    $extension2 = \Drupal::service('ui_patterns.twig.extension');
+    $extension3 = \Drupal::service('ui_patterns_settings.twig');
+    $extension4 = \Drupal::service('twig.loader.theme_registry');
+    $extension5 = \Drupal::service('twig.extension');
+    $extension6 = \Drupal::service('twig');
+    $extension7 = \Drupal::service('twig.loader.string');
+    $extension8 = \Drupal::service('twig.loader.theme_registry');
+
+
+// Add the extension to the Twig environment.
+    $twig->addExtension($extension);
+    $twig->addExtension($extension2);
+//    $twig->addExtension($extension3);
+////    $twig->addExtension($extension4);
+//    $twig->addExtension($extension5);
+////    $twig->addExtension($extension6);
+////    $twig->addExtension($extension7);
+////    $twig->addExtension($extension8);
+
+    $template = $twig->load($patternDefinition->getTemplate());
+//    dd($template);
+    $html = $template->render($fieldValues);
+    dd($html);
+//    dd($html);
+//    dd($fieldKeys, $fieldValues);
+
+//    $twig = new \Twig\Environment(new \Twig\Loader\ArrayLoader([$patternDefinition->getTemplate() => $content]));
+////    dd($twig);
+//    $template = $twig->load($patternDefinition->getTemplate());
+//    dd($template);
+//    $html = $template->render($fieldValues);
+////    dd($html);
+
+
+
+
+    return new JsonResponse(['content' => $html]);
   }
+
+//  public function getPatternVariables($patternName) {
+//    $patternVariables = [];
+//
+//    // Obtenez tous les modèles de motifs
+//    foreach (UiPatterns::getManager()->getPatterns() as $pattern) {
+//      dd($pattern);
+//      if ($pattern['pluginId'] === $patternName) {
+//        // Obtenez les variables du motif
+//        $patternVariables = $pattern->getVariables();
+//        break;
+//      }
+//    }
+//
+//
+//    // Remplacez les valeurs nulles par 'default_value'
+//    array_walk_recursive($patternVariables, function (&$value) {
+//      $value = ($value === null) ? 'default_value' : $value;
+//    });
+//
+//    return $patternVariables;
+//  }
+
   private function cleanTwigContent($content) {
     // Supprimer les blocs {% ... %}
     $content = preg_replace('/{%.*?%}/', '', $content);

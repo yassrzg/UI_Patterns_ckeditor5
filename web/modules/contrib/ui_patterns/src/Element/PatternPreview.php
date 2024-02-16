@@ -27,6 +27,7 @@ class PatternPreview extends Pattern {
     $fields = [];
     foreach ($definition->getFields() as $field) {
       $preview = $field->getPreview();
+//      var_dump($preview);
       // Some fields are used as Twig array keys and don't need escaping.
       if ($field->getEscape()) {
         // The examples are not user submitted and are safe markup.
@@ -34,6 +35,7 @@ class PatternPreview extends Pattern {
       }
 
       $fields[$field->getName()] = $preview;
+//      var_dump($preview);
     }
 
     if (isset($definition['additional']['attributes'])) {
@@ -59,7 +61,6 @@ class PatternPreview extends Pattern {
    * @see https://www.drupal.org/node/3353287
    */
   public static function getPreviewMarkup($preview) {
-    @trigger_error(__METHOD__ . '() is deprecated in ui_patterns:1.6.0 and is removed from ui_patterns:2.0.0. No replacement provided. See https://www.drupal.org/node/3353287', E_USER_DEPRECATED);
     if (is_array($preview)) {
       $rendered = [];
       // If preview is a render array add hashes to keys.

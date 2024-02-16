@@ -1,16 +1,10 @@
-#services:
-#  ui_patterns_ckeditor5.manager:
-#    class: Drupal\ui_patterns_ckeditor5\UiPatternsCkeditorManager
-#    arguments:
-#      - '@container.namespaces'
-#      - '@cache.discovery'
-#      - '@module_handler'
-#      - '@theme_handler'
-#
-#  plugin.manager.ckeditor.plugin:
-#    class: Drupal\ui_patterns_ckeditor5\Controller\UiPatternsCkeditorApi
-#    arguments:
-#      - '@ui_patterns_ckeditor5.manager'
-#      - '@editor'
-#    tags:
-#      - { name: ckeditor.plugin, id: 'ui_patterns_ckeditor5', label: 'Ckeditor5 Patterns' }
+services:
+  ui_patterns_ckeditor5.twig.extension:
+    class: Drupal\ui_patterns_ckeditor5\Template\TwigExtension
+    tags:
+      - { name: twig.extension }
+parameters:
+  ui_patterns_ckeditor5.file_extensions:
+    - ".ui_patterns.yml"
+    - ".patterns.yml"
+    - ".pattern.yml"

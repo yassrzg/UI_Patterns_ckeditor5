@@ -70,6 +70,7 @@ class UiPatternsSettings {
         }
       }
     }
+
     return $processed_settings;
   }
 
