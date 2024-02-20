@@ -124,98 +124,69 @@ export default class UiPatternsGroupCommand extends Command {
         }
 
         if (shouldAddPattern) {
-          // Check if definition.fileName is defined
-          // if (!definition.fileName) {
-          //   console.error('definition.fileName is undefined');
-          //   return;
-          // }
+          Promise.all([
+            fetch('/api/assets').then(response => response.json()),
+            fetch('/api/ui-patterns').then(response => response.json()),
+            fetch(`/api/ui-patterns/${patternName}/content`).then(response => response.json())
+          ])
+            .then(([assetResources, patternData, patternContent]) => {
+              console.log(assetResources, 'assetRessources');
+              // Apply CSS styles to CKEditor5
+              const cssLinks = Array.isArray(assetResources.cssFiles) ? assetResources.cssFiles : [];
+              console.log(cssLinks, 'cssLinks');
+              const editorInstance = this.editor;
+              // Apply CSS styles to CKEditor5
+              cssLinks.forEach(cssLink => {
+                // const style = document.createElement('style');
+                // style.textContent = `@import url('${cssLink}');`;
+                // document.head.appendChild(style);
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = '/'+cssLink;
+                document.head.appendChild(link);
+                // editorInstance.document.appendStyle(cssLink);
+              });
 
-          fetch('/api/ui-patterns')
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-              }
-              return response.json();
-            })
-            .then((data) => {
-              console.log(data, 'data');
+              // Check if 'js' property exists in assetResources and is an array
+              const jsLinks = Array.isArray(assetResources.jsFiles) ? assetResources.jsFiles : [];
+
+              // Load JS scripts into CKEditor5
+              jsLinks.forEach(jsLink => {
+                const script = document.createElement('script');
+                script.src = '/'+jsLink;
+                document.head.appendChild(script);
+              });
+
               // Assuming data is an array of pattern objects with a 'path' property
-              const patternPath = data.find((path) => path.endsWith(patternName));
-              // const pattern = data.find((pattern) => pattern.path && pattern.path.includes(patternName));
-              // console.log(patternPath, 'pattern');
+              const patternPath = patternData.find(path => path.endsWith(patternName));
 
               if (!patternPath) {
                 console.log('Pattern not found');
                 throw new Error(`Pattern ${patternName} not found`);
               }
 
-              // Now you have the specific pattern, you can fetch the Twig template
-              fetch(`/api/ui-patterns/${patternName}/content`)
-                .then((response) => {
-                  if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                  }
-                  return response.json();
-                })
-                .then((data) => {
-                  // The content of the file is now in the "data.content" variable
-                  console.log('Contenu brut du modèle Twig :', data.content);
-
-                  let content = data.content;
-                  // Remplacez les balises <button> par des balises <span>
-                  content = content.replace(/<button\b([^>]*)>/g, '<span$1>');
-                  content = content.replace(/<\/button>/g, '</span>');
-                  // const match = content.match(/attributes\.add(class|Class)\(['"]([^'"]+)['"]\)/i);
-
-                  // const parser = new DOMParser();
-                  // const doc = parser.parseFromString(content, 'text/html');
-                  // console.log(doc, 'doc');
-                  // // Récupération de toutes les balises dans l'objet DOM
-                  // const allElements = doc.querySelectorAll('*');
-                  //
-                  // // Parcours de chaque balise et récupération des informations
-                  // allElements.forEach((element) => {
-                  //   const tagName = element.tagName.toLowerCase(); // Nom de la balise en minuscules
-                  //   const attributes = Array.from(element.attributes).map((attr) => ({
-                  //     name: attr.name,
-                  //     value: attr.value,
-                  //   }));
-                  //   const content = element.innerHTML;
-                  //
-                  //   // Vous pouvez maintenant utiliser ces informations comme nécessaire
-                  //   console.log('Balise:', tagName);
-                  //   console.log('Attributs:', attributes);
-                  //   console.log('Contenu:', content);
-                  // });
-                  // console.log(content,'content2');
-                  // const twigData = {
-                  //   expanded: true,
-                  //   title: 'Mon Titre',
-                  //   content: 'Mon contenu',
-                  // }
-                  // const Twig = require('twig');
-                  // const renderedHtml = Twig.twig({ data: content }).render(twigData);
-
-                  const editorInstance = this.editor;
-
-                  // console.log('Contenu rendu par Twig :', renderedHtml);
-                  editorInstance.setData(content, true);
-                  console.log(editorInstance.setData(content, true), 'editorInstance.setData(content, true)');
+              // Process pattern content
+              let content = patternContent.content;
+              content = content.replace(/<button\b([^>]*)>/g, '<span$1>');
+              content = content.replace(/<\/button>/g, '</span>');
 
 
 
-                  // Insert the content into CKEditor5
-                  // const editorInstance = ...; // Get your CKEditor5 instance here
-                  // editorInstance.setData(data.content);
-                })
-                .catch((error) => console.error(error));
+              editorInstance.setData(content, true);
+              console.log(editorInstance.setData(content, true), 'editorInstance.setData(content, true)');
+
+              // Continue with the rest of the code
+              const selectables = getAffectedBlocks(selection.getSelectedBlocks(), model.schema);
+              for (const selectable of selectables) {
+                // ... (continue with the rest of the code)
+              }
             })
-            .catch((error) => console.error(error));
+            .catch(error => console.error(error));
 
-          htmlSupport.removeModelHtmlClass(schemaDefinition.view, definition.excluded_classes, selectable);
-          htmlSupport.addModelHtmlClass(schemaDefinition.view, definition.classes, selectable);
+          // htmlSupport.removeModelHtmlClass(schemaDefinition.view, definition.excluded_classes, selectable);
+          // htmlSupport.addModelHtmlClass(schemaDefinition.view, definition.classes, selectable);
         } else {
-          htmlSupport.removeModelHtmlClass(schemaDefinition.view, definition.classes, selectable);
+          // htmlSupport.removeModelHtmlClass(schemaDefinition.view, definition.classes, selectable);
         }
       }
     });

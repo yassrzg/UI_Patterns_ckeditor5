@@ -232,6 +232,8 @@ class UiPatternsCkeditorApi extends ControllerBase {
   public function getPatternContent($patternName) {
 
     $uiPatternsManager = \Drupal::service('plugin.manager.ui_patterns');
+
+
     $patternDefinitions = $uiPatternsManager->getDefinitions();
 //    dd($patternDefinitions);
 //    foreach ($patternDefinitions as $patternId => $patternDefinition) {
@@ -287,21 +289,59 @@ class UiPatternsCkeditorApi extends ControllerBase {
     if (isset($patternDefinitions[$patternName])) {
       $patternDefinition = $patternDefinitions[$patternName];
       $fields = $patternDefinition->getFields();
-      $fieldKeys = array_keys($fields);
-      foreach ($fieldKeys as $key) {
-        if ($key === 'image') {
-          $module_path= \Drupal::service('extension.path.resolver')->getPath('module', 'ui_patterns_ckeditor5');
-          $image_path = $module_path . '/assets/image/images.webp';
-          $image_url = \Drupal::service('file_url_generator')->generateAbsoluteString($image_path);
-          $fieldValues[$key] = $image_url;
-        } else {
-          $fieldValues[$key] = 'default value';
+
+      $fieldValues = [];
+      foreach ($fields as $field) {
+        $type = $field->getType();
+        $preview = $field->getPreview();
+//        dd($fields, 'type');
+
+        switch ($type) {
+          case 'text':
+            $fieldValues[$field->getName()] = $preview ?? 'default text';
+//            dd('hello', $fieldValues[$field->getName()]);
+            break;
+//          case 'image':
+//            $fieldValues[$field->getName()] = $preview ?? 'path/to/default/image.jpg';
+//            dd($fieldValues[$field->getName()], 'fieldValues');
+            break;
+          case 'boolean':
+            $fieldValues[$field->getName()] = $preview ?? false;
+            break;
+          case'render':
+//            $fieldValues[$field->getName()] = $preview ?? 'path/to/default/image.jpg';
+//            dd($fieldValues[$field->getName()] = $preview, 'fieldValues');
+              foreach ($preview as $fieldName => $fieldValue) {
+//                dd($fieldName);
+                // Si la clé est "theme" et la valeur est "image", affichez la balise img
+                if ($fieldName === 'theme' && $fieldValue === 'image') {
+                  // Construisez votre balise img avec les attributs nécessaires
+                  $uri = $preview['uri']; // Supposons que 'uri' est toujours défini
+//                  dd($uri, 'uri');                  dd($uri, 'uri');
+//                  $encodedUri = rawurlencode($uri);
+//                  echo $uri;
+//                  dd($encodedUri, 'encodedUri');
+                  $alt = $preview['alt'] ?? ''; // Valeur par défaut pour alt si non défini
+                  $preview = "<img src=\"$uri\" alt=\"$alt\">";
+//                  $fieldValues['image'] = [$preview];
+
+                }
+//               dd($preview);
+                // Vous pouvez ajouter d'autres conditions ou traitement selon les besoins
+              }
+            $fieldValues['image'] = $preview;
+            break;
+          // Ajoutez d'autres types de champ au besoin
+          default:
+            $fieldValues[$field->getName()] = $preview ?? 'default value';
         }
       }
-
     } else {
-      return new JsonResponse(['error' => "Pattern {$patternName} not found"], 404);
+      // Gérer le cas où le motif spécifié n'a pas été trouvé
+      echo "Le motif '$patternName' n'a pas été trouvé.";
     }
+//    dd($fieldValues, 'fieldValues');
+
 //    dd($fieldValues, 'fieldValues');
 //    dd($fieldValues);
     $loader = new \Twig\Loader\ArrayLoader([$patternDefinition->getTemplate() => $content]);
@@ -311,7 +351,6 @@ class UiPatternsCkeditorApi extends ControllerBase {
     $extension = \Drupal::service('ui_patterns_ckeditor5.twig.extension');
     $extension2 = \Drupal::service('ui_patterns.twig.extension');
     $extension3 = \Drupal::service('ui_patterns_settings.twig');
-    $extension4 = \Drupal::service('twig.loader.theme_registry');
     $extension5 = \Drupal::service('twig.extension');
     $extension6 = \Drupal::service('twig');
     $extension7 = \Drupal::service('twig.loader.string');
@@ -321,17 +360,14 @@ class UiPatternsCkeditorApi extends ControllerBase {
 // Add the extension to the Twig environment.
     $twig->addExtension($extension);
     $twig->addExtension($extension2);
-//    $twig->addExtension($extension3);
-////    $twig->addExtension($extension4);
-//    $twig->addExtension($extension5);
-////    $twig->addExtension($extension6);
-////    $twig->addExtension($extension7);
-////    $twig->addExtension($extension8);
+    $twig->addExtension($extension3);
+    $twig->addExtension($extension5);
+
 
     $template = $twig->load($patternDefinition->getTemplate());
 //    dd($template);
     $html = $template->render($fieldValues);
-    dd($html);
+//    dd($html);
 //    dd($html);
 //    dd($fieldKeys, $fieldValues);
 
@@ -402,6 +438,33 @@ class UiPatternsCkeditorApi extends ControllerBase {
     }
 
     return $flattened;
+  }
+
+
+  public function LinksForCssAndJS() {
+    $theme = \Drupal::theme()
+      ->getActiveTheme()
+      ->getName();
+    $libraries_themes = \Drupal::service('library.discovery')->getLibrariesByExtension($theme);
+
+    $jsFiles = [];
+    $cssFiles = [];
+
+    foreach ($libraries_themes as $library) {
+      if (isset($library['js'])) {
+        foreach ($library['js'] as $jsFile) {
+          $jsFiles[] = $jsFile['data'];
+        }
+      }
+
+      if (isset($library['css'])) {
+        foreach ($library['css'] as $cssFile) {
+          $cssFiles[] = $cssFile['data'];
+        }
+      }
+    }
+    return new JsonResponse(['jsFiles' => $jsFiles, 'cssFiles' => $cssFiles]);
+
   }
 
 }

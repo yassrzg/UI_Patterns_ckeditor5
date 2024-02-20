@@ -48,6 +48,16 @@ class TwigExtension extends AbstractExtension {
     ];
   }
 
+
+  public function addClass($element, $class)
+  {
+    if (is_array($element)) {
+      $element['#attributes']['class'][] = $class;
+    }
+
+    return $element;
+  }
+
   /**
    * Render given pattern.
    *

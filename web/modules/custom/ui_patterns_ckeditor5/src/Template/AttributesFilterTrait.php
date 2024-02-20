@@ -29,6 +29,7 @@ trait AttributesFilterTrait {
    */
   public function addClass(mixed $element, ...$classes): mixed {
     if (!\is_array($element)) {
+      dd('hello');
       return $element;
     }
     if ($this->arrayIsList($element)) {
@@ -46,6 +47,7 @@ trait AttributesFilterTrait {
 
     // Make sure element gets rendered again.
     unset($element['#printed']);
+    dd($element, 'element');
 
     return $element;
   }
