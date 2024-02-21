@@ -1,0 +1,57 @@
+tabs:
+  label: Tabs
+  description: Groups different content in a limited space and allows dense content to be divided into individually accessible sections to make it easier for the user to read. https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/onglets/
+  category: Tabs
+  settings:
+    label:
+      type: token
+      label: Tabs label
+      description: Used for aria-label.
+      preview: Tabs label
+  fields:
+    items:
+      type: render
+      label: Tabs items
+      description: Each tabs must have an ID unique in the scope of the page.
+      preview:
+        - type: pattern
+          id: tab
+          variant: selected
+          title: Tab label 1
+          icon: fr-icon-checkbox-circle-line
+          unique_id: e9759ba9-1
+        - type: pattern
+          id: tab
+          title: Tab label 2
+          unique_id: e9759ba9-2
+        - type: pattern
+          id: tab
+          title: Tab label 3
+          unique_id: e9759ba9-3
+    panels:
+      type: render
+      label: Panels
+      description: Each panels must have an ID related to its tab.
+      preview:
+        - type: pattern
+          id: tab_panel
+          variant: selected
+          content:
+            type: html_tag
+            tag: p
+            value: Tab content 1
+          unique_id: e9759ba9-1
+        - type: pattern
+          id: tab_panel
+          content:
+            type: html_tag
+            tag: p
+            value: Tab content 2
+          unique_id: e9759ba9-2
+        - type: pattern
+          id: tab_panel
+          content:
+            type: html_tag
+            tag: p
+            value: Tab content 3
+          unique_id: e9759ba9-3

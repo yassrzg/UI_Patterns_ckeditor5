@@ -1,0 +1,38 @@
+accordion:
+  label: Accordion
+  description: Used to condense space by hiding content and revealing it as needed. https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/accordeon
+  category: Accordion
+  settings:
+    accordion_id:
+      type: token
+      label: ID
+      description: "Must start with a letter. Randomly generated if empty."
+    title_tag:
+      type: select
+      label: HTML tag for title
+      options:
+        h2: h2
+        h3: h3
+        h4: h4
+        h5: h5
+        h6: h6
+      preview: h4
+    expanded:
+      type: boolean
+      label: Expanded?
+      description: Accordion will be expanded on page load
+      default_value: false
+      preview: false
+  fields:
+    title:
+      type: text
+      label: Title
+      preview: Accordion title
+    content:
+      type: render
+      label: Content
+      description: The accordion renderable content.
+      preview:
+        type: html_tag
+        tag: p
+        value: Accordion content

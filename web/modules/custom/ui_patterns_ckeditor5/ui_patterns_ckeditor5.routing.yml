@@ -1,11 +1,30 @@
-#ui_patterns_library.ui_patterns_ckeditor_api_get_all_patterns:
-#  path: '/api/ui-patterns'
-#  defaults:
-#    _controller: '\Drupal\ui_patterns_ckeditor5\Controller\UiPatternsCkeditorApi::getAllPatterns'
-#    _title: 'Get All UI Patterns'
-#  requirements:
-#    _role: 'administrator'
-#  methods: [GET]
+ui_patterns_library.ui_patterns_ckeditor_api_get_all_patterns:
+  path: '/api/ui-patterns'
+  defaults:
+    _controller: '\Drupal\ui_patterns_ckeditor5\Controller\UiPatternsCkeditorApi::getAllPatterns'
+    _title: 'Get All UI Patterns'
+  requirements:
+    _role: 'administrator'
+  methods: [GET]
+
+
+ui_patterns_library.ui_patterns_ckeditor_api_get_patterns_content:
+  path: '/api/ui-patterns/{patternName}/content'
+  defaults:
+    _controller: '\Drupal\ui_patterns_ckeditor5\Controller\UiPatternsCkeditorApi::getPatternContent'
+    _title: 'Get All UI Patterns Content'
+  requirements:
+    _role: 'administrator'
+  methods: [GET]
+
+ui_patterns_library.ui_patterns_ckeditor_api_get_css_js:
+  path: '/api/assets'
+  defaults:
+    _controller: '\Drupal\ui_patterns_ckeditor5\Controller\UiPatternsCkeditorApi::LinksForCssAndJS'
+    _title: 'Get css and js '
+  requirements:
+    _role: 'administrator'
+  methods: [GET]
 
 
 

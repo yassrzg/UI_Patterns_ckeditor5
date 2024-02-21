@@ -1,0 +1,39 @@
+tag_group:
+  label: Tags group
+  description: Grouping of tags. https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/tag
+  category: Tag
+  fields:
+    tags:
+      type: render
+      label: Tags
+      description: A list of 'tag' components.
+      preview:
+        - type: pattern
+          id: tag
+          fields:
+            label: Label tag
+            url: "https://example.com"
+        - type: pattern
+          id: tag
+          fields:
+            label: Label tag
+        - type: pattern
+          id: tag
+          variant: sm
+          fields:
+            label: Label tag
+            url: "https://example.com"
+        - type: pattern
+          id: tag
+          fields:
+            label: Label tag
+            url: "https://example.com"
+        - type: pattern
+          id: tag
+          fields:
+            label: Label tag
+            url: "https://example.com"
+        - type: pattern
+          id: tag
+          fields:
+            label: Label tag

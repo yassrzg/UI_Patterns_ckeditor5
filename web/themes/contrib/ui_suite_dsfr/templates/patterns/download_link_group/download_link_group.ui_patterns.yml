@@ -1,0 +1,49 @@
+download_link_group:
+  label: Download link group
+  description: It is possible to make a list of download links. https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/telechargement-de-fichier
+  category: Download
+  settings:
+    bordered:
+      type: boolean
+      label: With border?
+      preview: true
+    title_tag:
+      type: select
+      label: HTML tag for title
+      options:
+        h2: h2
+        h3: h3
+        h4: h4
+        h5: h5
+        h6: h6
+      preview: h4
+  fields:
+    title:
+      type: text
+      label: Title
+      preview: Download group title
+    downloads:
+      type: render
+      label: Downloads items
+      description: "A list of 'Download link' components."
+      preview:
+        - type: pattern
+          id: download_link
+          settings:
+            new_window: true
+          fields:
+            name: Download document 1
+            url: "#"
+            detail: PDF – 161,88 Ko
+        - type: pattern
+          id: download_link
+          fields:
+            name: Download document 2
+            url: "#"
+            detail: PNG – 61,88 Ko
+        - type: pattern
+          id: download_link
+          fields:
+            name: Download document 3
+            url: "#"
+            detail: JPG – 261,88 Ko

@@ -46,6 +46,11 @@ getDirectories('./js/ckeditor5_plugins').forEach((dir) => {
       libraryTarget: 'umd',
       libraryExport: 'default',
     },
+    resolve: {
+      fallback: {
+        path: require.resolve('path-browserify'),
+      },
+    },
     plugins: [
       // It is possible to require the ckeditor5-dll.manifest.json used in
       // core/node_modules rather than having to install CKEditor 5 here.

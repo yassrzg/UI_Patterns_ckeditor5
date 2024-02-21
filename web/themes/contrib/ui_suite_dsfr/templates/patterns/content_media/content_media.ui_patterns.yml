@@ -1,0 +1,49 @@
+content_media:
+  label: Content media
+  description: "Media content refers to your photo and video content. https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/contenu-medias/"
+  variants:
+    default:
+      label: Medium
+    lg:
+      label: Large
+    sm:
+      label: Small
+  settings:
+    ratio:
+      type: select
+      label: Video Ratio
+      description: Used only for video.
+      options:
+        32x9: 32:9 (image only)
+        16x9: 16:9 (default)
+        3x2: 3:2 (image only)
+        4x3: 4:3
+        1x1: 1:1
+        3x4: 3:4 (image only)
+        2x3: 2:3 (image only)
+      preview: 16x9
+  fields:
+    video:
+      type: render
+      label: Video player
+      description: Not expected if image is set.
+      preview:
+        type: html_tag
+        tag: iframe
+        attributes:
+          src: https://www.youtube.com/embed/HyirpmPL43I
+          allow: "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen: ""
+    image:
+      type: render
+      label: Image
+      description: Not expected if video is set.
+    caption:
+      type: text
+      label: Caption
+      preview: "© Media caption"
+    transcription:
+      type: render
+      label: Transcription
+      description: A transcription text for the video, or detailed description for the image (if necessary).
+      preview: "<p>Transcription text : Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus.</p>"

@@ -88,6 +88,7 @@ abstract class UiPatternsBase extends CKEditor5PluginDefault implements CKEditor
       // @phpstan-ignore-next-line
       $plugin_definition,
       $container->get('plugin.manager.ui_patterns'),
+//      dd( $container->get('plugin.manager.ui_patterns')),
       $container->get('transliteration'),
     );
   }
@@ -107,6 +108,10 @@ abstract class UiPatternsBase extends CKEditor5PluginDefault implements CKEditor
 //    dd('hello');
 //    $grouped_plugin_definitions = $this->stylesManager->getGroupedDefinitions();
     $grouped_plugin_definitions = $this->patternsManager->getGroupedDefinitions();
+//    $yass = \Drupal::service('plugin.manager.ui_patterns')->getDefinitions();
+//    dd($yass);
+//    dd($grouped_plugin_definitions);
+
 //    dd($grouped_plugin_definitions);
     if (empty($grouped_plugin_definitions)) {
       $form['warning'] = [
@@ -126,10 +131,11 @@ abstract class UiPatternsBase extends CKEditor5PluginDefault implements CKEditor
 
     $form['enabled_patterns'] = [
       '#type' => 'fieldset',
-      '#title' => $this->t('Enabled Styles'),
-      '#description' => $this->t('These are the styles types that will appear in the UI Styles dropdown.'),
+      '#title' => $this->t('Enabled Patterns'),
+      '#description' => $this->t('These are the Patterns types that will appear in the UI Patterns dropdown.'),
       '#tree' => TRUE,
     ];
+//    dd($form['enabled_patterns']);
 
     // Until https://www.drupal.org/project/drupal/issues/2269823 is done, we
     // have to create the groups using separated form elements.
@@ -137,8 +143,9 @@ abstract class UiPatternsBase extends CKEditor5PluginDefault implements CKEditor
       $opened_group = FALSE;
       foreach ($groupedDefinitions as $definition) {
         $style_plugin_id = $definition->id();
-        $default_value = \in_array($style_plugin_id, $this->configuration['enabled_patterns'], TRUE) ? $style_plugin_id : NULL;
 
+        $default_value = \in_array($style_plugin_id, $this->configuration['enabled_patterns'], TRUE) ? $style_plugin_id : NULL;
+//        dd($style_plugin_id, $default_value, $this->configuration);
         // If the group has at least one style enabled. Display it opened.
         if (!$opened_group && $default_value !== NULL) {
           $opened_group = TRUE;
@@ -156,6 +163,7 @@ abstract class UiPatternsBase extends CKEditor5PluginDefault implements CKEditor
 //        if ($form_state->get(self::MULTIPLE_GROUPS_KEY) && $definition->hasCategory()) {
         if ($form_state->get(self::MULTIPLE_GROUPS_KEY) && $definition) {
           $group_key = $this->getMachineName($definition->getCategory());
+
 
           if (!isset($form['enabled_patterns'][$group_key])) {
             $form['enabled_patterns'][$group_key] = [
@@ -175,7 +183,6 @@ abstract class UiPatternsBase extends CKEditor5PluginDefault implements CKEditor
         }
       }
     }
-
     return $form;
   }
 
@@ -217,10 +224,10 @@ abstract class UiPatternsBase extends CKEditor5PluginDefault implements CKEditor
     $plugin_definition = $this->getPluginDefinition();
     $subset = $plugin_definition->getElements();
     $subset = \array_diff($subset, ['<$any-html5-element class>']);
-    $enabled_classes = $this->getEnabledStylesClasses();
-    if (!empty($enabled_classes)) {
-      $subset[] = '<$any-html5-element class="' . \implode(' ', $enabled_classes) . '">';
-    }
+//    $enabled_classes = $this->getEnabledStylesClasses();
+//    if (!empty($enabled_classes)) {
+//      $subset[] = '<$any-html5-element class="' . \implode(' ', $enabled_classes) . '">';
+//    }
     return $subset;
   }
 
@@ -232,31 +239,44 @@ abstract class UiPatternsBase extends CKEditor5PluginDefault implements CKEditor
     $config = $static_plugin_config;
     $enabled_styles = $this->configuration['enabled_patterns'];
 
+
     foreach ($enabled_styles as $plugin_id) {
-      $definition = $this->stylesManager->getDefinition($plugin_id, FALSE);
+      $definition = $this->patternsManager->getDefinition($plugin_id, FALSE);
+//      print_r($definition);
       if ($definition == NULL) {
         continue;
       }
+      $basePath = $definition->getBasePath();
+      $fileName = $definition->getFileName();
+      $template = $definition->getTemplate();
 
-      $style_options = $definition->getOptionsAsOptions();
-      $style_options_keys = \array_keys($style_options);
-      $cke5_style_options = [];
-      foreach ($style_options as $classes => $option_label) {
+//      print_r($basePath);
+//      print_r($fileName);
+//      print_r($template);
+
+      $pattern_options = $definition->getFields();
+//      print_r($pattern_options);
+      $pattern_options_keys = \array_keys($pattern_options);
+      $cke5_pattern_options = [];
+      foreach ($pattern_options as $classes => $option_label) {
         $cke5_classes = \explode(' ', $classes);
-        $cke5_style_options[] = [
+        $cke5_pattern_options[] = [
           'name' => $option_label,
           'classes' => $cke5_classes,
-          'excluded_classes' => $this->getExcludedClasses($style_options_keys, $cke5_classes),
+          'excluded_classes' => $this->getExcludedClasses($pattern_options_keys, $cke5_classes),
         ];
       }
 
       $config[$this->ckeditor5ConfigKey]['options'][] = [
         'id' => $plugin_id,
         'label' => $definition->getLabel(),
-        'options' => $cke5_style_options,
+        'options' => $cke5_pattern_options,
+        'basePath' => $basePath,
+        'fileName' => $fileName,
+        'template' => $template,
       ];
     }
-
+//    print_r($config);
     return $config;
   }
 
@@ -271,7 +291,7 @@ abstract class UiPatternsBase extends CKEditor5PluginDefault implements CKEditor
     $enabled_styles = $this->configuration['enabled_patterns'];
 
     foreach ($enabled_styles as $plugin_id) {
-      $definition = $this->stylesManager->getDefinition($plugin_id, FALSE);
+      $definition = $this->patternsManager->getDefinition($plugin_id, FALSE);
       if ($definition == NULL) {
         continue;
       }

@@ -1,0 +1,33 @@
+badge_group:
+  label: Badge group
+  description: "The group of badges allows to highlight information. https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/badge"
+  category: Badge
+  fields:
+    badges:
+      type: render
+      label: Badges
+      description: A list of 'badge' components.
+      preview:
+        - type: pattern
+          id: badge
+          settings:
+            color_schema: green-bourgeon
+          fields:
+            label: Badge with color selected
+        - type: pattern
+          id: badge
+          settings:
+            system_type: success
+          fields:
+            label: System success badge
+        - type: pattern
+          id: badge
+          settings:
+            system_type: error
+            without_icon: true
+          fields:
+            label: System error badge without an icon
+        - type: pattern
+          id: badge
+          fields:
+            label: Simple badge

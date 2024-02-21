@@ -1,0 +1,10 @@
+services:
+  ui_patterns_ckeditor5.twig.extension:
+    class: Drupal\ui_patterns_ckeditor5\Template\TwigExtension
+    tags:
+      - { name: twig.extension }
+parameters:
+  ui_patterns_ckeditor5.file_extensions:
+    - ".ui_patterns.yml"
+    - ".patterns.yml"
+    - ".pattern.yml"

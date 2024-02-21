@@ -1,0 +1,54 @@
+badge:
+  label: Badge
+  description: Highlight information of the “status” or “state” type on an element of the site. https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/badge
+  category: Badge
+  variants:
+    default:
+      label: Default
+    sm:
+      label: Small
+  settings:
+    color_schema:
+      type: select
+      label: Color schema
+      description: "It is possible to use illustrative colors for not system badges only. Optional."
+      options:
+        green-tilleul-verveine: Tilleul Verveine
+        green-bourgeon: Bourgeon
+        green-emeraude: Émeraude
+        green-menthe: Menthe
+        green-archipel: Archipel
+        blue-ecume: Écume
+        blue-cumulus: Cumulus
+        purple-glycine: Glycine
+        pink-macaron: Macaron
+        pink-tuile: Tuile
+        yellow-tournesol: Tournesol
+        yellow-moutarde: Moutarde
+        orange-terre-battue: Terre Battue
+        brown-cafe-creme: Café crème
+        brown-caramel: Caramel
+        brown-opera: Opéra
+        beige-gris-galet: Gris Galet
+      preview: brown-caramel
+    system_type:
+      type: select
+      label: System type
+      description: If selected 'Color schema' will be ignored. Optional.
+      options:
+        success: Success
+        error: Error
+        info: Info
+        warning: Warning
+        new: New
+      preview: new
+    without_icon:
+      type: boolean
+      label: Without an icon?
+      description: Will be used for system badges only. Optional.
+      preview: false
+  fields:
+    label:
+      type: text
+      label: Label
+      preview: Badge label

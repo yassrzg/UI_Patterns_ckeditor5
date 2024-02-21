@@ -1,0 +1,9 @@
+libraries_ui.overview:
+  path: '/admin/reports/libraries'
+  defaults:
+    _controller: '\Drupal\libraries_ui\Controller\LibrariesUiController::libraries'
+    _title: 'Libraries'
+  requirements:
+    _permission: 'access libraries_ui'
+  options:
+    _admin_route: TRUE

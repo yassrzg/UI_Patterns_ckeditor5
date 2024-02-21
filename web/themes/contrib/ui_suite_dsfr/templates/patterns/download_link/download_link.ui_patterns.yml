@@ -1,0 +1,28 @@
+download_link:
+  label: Download link
+  description: One or more files available for download along with some text. https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/telechargement-de-fichier
+  category: Download
+  settings:
+    url:
+      type: token
+      label: File url
+      preview: "#"
+    new_window:
+      type: boolean
+      label: Open is a new window?
+      preview: true
+    direct_download:
+      type: boolean
+      label: Direct download?
+      description: The attribute download allows the direct download of the resource, without opening it.
+  fields:
+    name:
+      type: text
+      label: File name
+      description: Text name of the file.
+      preview: Download document lorem ipsum sit dolores amet
+    detail:
+      type: text
+      label: File detail
+      description: File format and weight.
+      preview: JPG – 61,88 ko

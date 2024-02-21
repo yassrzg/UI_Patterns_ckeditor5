@@ -3,7 +3,7 @@ internal.ckeditor5.ui_patterns_group:
     theme:
       assets/css/ui_patterns_ckeditor5_group.editor.css: {}
   js:
-    js/build/uiPatternGroup.js: { preprocess: false, minified: true }
+    js/build/uiPatternsGroup.js: { preprocess: false, minified: true }
   dependencies:
     - core/ckeditor5
 
