@@ -9,6 +9,6 @@ use Drupal\ui_patterns\UiPatternsManager;
  */
 class UiPatternsCkeditorManager extends UiPatternsManager {
 
-  // Your custom manager logic here.
+  
 
 }

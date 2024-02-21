@@ -27,14 +27,16 @@ export default class UiPatternsGroupCommand extends Command {
      */
     this.set('enabledPatterns', []);
 
-    this._patternDefinitions = patternDefinitions;
-    patternDefinitions = editor.config.get('UiPatternsGroup.options');
-    console.log(patternDefinitions, 'patternDefinitions');
+    this._patternDefinitions = patternDefinitions || editor.config.get('UiPatternsGroup.options');
+
+    console.log(patternDefinitions, 'patternDefinitions yass');
   }
 
   /**
    * @inheritDoc
    */
+
+  // a revoir
   refresh() {
     const model = this.editor.model;
     const selection = model.document.selection;
@@ -98,12 +100,14 @@ export default class UiPatternsGroupCommand extends Command {
     const htmlSupport = this.editor.plugins.get('GeneralHtmlSupport');
     const dataSchema = this.editor.plugins.get('DataSchema');
     console.log(dataSchema, 'dataSchema');
-
-    const definition = this._patternDefinitions.find(({ name }) => name.startsWith(patternName));
+    console.log(this._patternDefinitions, 'this._patternDefinitions yass');
+    // const definition = this._patternDefinitions.find(({ name }) => name.includes(patternName));
+    const definition = this._patternDefinitions.find(pattern => pattern.name.includes(patternName));
     console.log(definition, 'definition');
     const shouldAddPattern = !this.value.includes(definition.name);
 
     if (!definition) {
+      console.log('hello');
       console.error(`Pattern definition not found for ${patternName}`);
       return;
     }
@@ -142,7 +146,7 @@ export default class UiPatternsGroupCommand extends Command {
                 // document.head.appendChild(style);
                 const link = document.createElement('link');
                 link.rel = 'stylesheet';
-                link.href = '/'+cssLink;
+                link.href = '/' + cssLink;
                 document.head.appendChild(link);
                 // editorInstance.document.appendStyle(cssLink);
               });
@@ -153,12 +157,13 @@ export default class UiPatternsGroupCommand extends Command {
               // Load JS scripts into CKEditor5
               jsLinks.forEach(jsLink => {
                 const script = document.createElement('script');
-                script.src = '/'+jsLink;
+                script.src = '/' + jsLink;
                 document.head.appendChild(script);
               });
 
               // Assuming data is an array of pattern objects with a 'path' property
-              const patternPath = patternData.find(path => path.endsWith(patternName));
+              const patternPath = patternData.find(path => path.includes(patternName));
+              console.log(patternPath, 'patternPath');
 
               if (!patternPath) {
                 console.log('Pattern not found');

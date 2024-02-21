@@ -54,41 +54,6 @@ class UiPatternsCkeditorApi extends ControllerBase {
    * @return JsonResponse
    *   JSON response containing all patterns.
    */
-//  public function getAllPatterns(): JsonResponse
-//  {
-//
-//    $theme = \Drupal::theme()
-//      ->getActiveTheme()
-//      ->getName();
-//    $libraries_themes = \Drupal::service('library.discovery')->getLibrariesByExtension($theme);
-////    dd($libraries_themes);
-//    $build = [
-//      '#theme' => 'my_theme_hook',
-//      '#attached' => [
-//        'css' => [],
-//        'js' => [],
-//      ],
-//    ];
-//      // Attach JS libraries.
-//    foreach ($libraries_themes as $library_name => $library_info) {
-//      // Attacher les bibliothèques JS.
-//      if (isset($library_info['js'])) {
-//        foreach ($library_info['js'] as $js) {
-//          $build['#attached']['js'][] = $js['data'];
-//        }
-//      }
-//
-//      // Attach css libraries.
-//      if (isset($library_info['css'])) {
-//        foreach ($library_info['css'] as $css) {
-//          $build['#attached']['css'][] = $css['data'];
-//        }
-//      }
-//    }
-//
-//    $build['#attached']['library'][] = 'ui_patterns_ckeditor5/patterns';
-//    return new JsonResponse($libraries_themes);
-//  }
 
   public function getAllPatterns(): JsonResponse
   {
@@ -107,99 +72,6 @@ class UiPatternsCkeditorApi extends ControllerBase {
       $patternPaths[] = $basePath . '/' . $template;
     }
 
-//    dd($patternPaths);
-//    dd($patterns);
-//    $grouped_plugin_definitions = $this->patternsManager->getSortedDefinitions();
-    $grouped_plugin_definitions = $this->patternsManager->getPatternsOptions();
-//    dd($grouped_plugin_definitions);
-//    $accordionSettings = $this->patternsManager->getDefinition('accordion')->getAdditional()['settings'];
-//    dd($accordionSettings);
-
-//    dd($patterns, $grouped_plugin_definitions);
-//    $yass = \Drupal::service('plugin.manager.ui_patterns')->getDefinitions();
-//    $yass2 = [];
-//
-//    foreach ($yass as $patternDefinition) {
-//      $yass2[] = $this->getPatternPaths($patternDefinition);
-//    }
-////
-////    dd($yass2);
-//
-//    /** @var \Drupal\ui_patterns\Plugin\PatternBase $pattern */
-//    $items = [
-//      'patterns_destination' => [
-//        'variables' => ['sources' => NULL, 'context' => NULL],
-//      ],
-//      'patterns_use_wrapper' => [
-//        'variables' => ['use' => NULL],
-//      ],
-//    ];
-//
-//    foreach (UiPatterns::getManager()->getPatterns() as $pattern) {
-//      $items += $pattern->getThemeImplementation();
-//    }
-
-//    $patternDefinition = new PatternDefinition();
-//    $patternDefinition->getLibraries();
-
-//    $libraries = [];
-//
-//    foreach ($yass as $patternDefinition) {
-//      if ($patternDefinition instanceof \Drupal\ui_patterns\Definition\PatternDefinition) {
-//        // Assurez-vous que $patternDefinition est bien une instance de PatternDefinition.
-//        $libraries[] = $patternDefinition->getLibraries();
-//      }
-//    }
-
-//    foreach (UiPatterns::getPatternDefinition($yass2['#id'])->getLibrariesNames() as $library) {
-//      $element['#attached']['library'][] = $library;
-//    }
-//    dd($library);
-//
-//// Faites quelque chose avec le tableau $libraries.
-//    dd($libraries);
-
-
-
-//    $uiPatternsManager = \Drupal::service('plugin.manager.ui_patterns');
-//
-//    $patternDefinitions = $uiPatternsManager->getDefinitions();
-////    dd($patternDefinitions);
-//    foreach ($patternDefinitions as $patternDefinition) {
-//      // Vérifiez si la définition est une instance de PatternInterface.
-//      if ($patternDefinition instanceof \Drupal\ui_patterns\Plugin\PatternInterface) {
-//        // Utilisez la méthode getLibraryDefinitions pour obtenir les informations sur les bibliothèques.
-//        $libraryDefinitions = $patternDefinition->getLibraryDefinitions();
-//
-//        // Faites quelque chose avec les informations sur les bibliothèques, par exemple, imprimez-les.
-//        dd($libraryDefinitions);
-//      }
-//    }
-//     GETTING ACTIVE THEME
-//    $theme = \Drupal::theme()
-//      ->getActiveTheme();
-//    dd($theme);
-
-//    $theme = \Drupal::theme()
-//      ->getActiveTheme()
-//      ->getName();
-//    $installed_atjs = \Drupal::service('library.discovery')->getLibrariesByExtension($theme);
-//    dd($installed_atjs);
-
-//    /** @var \Drupal\ui_patterns\Plugin\PatternBase $pattern */
-//    $items = [
-//      'patterns_destination' => [
-//        'variables' => ['sources' => NULL, 'context' => NULL],
-//      ],
-//      'patterns_use_wrapper' => [
-//        'variables' => ['use' => NULL],
-//      ],
-//    ];
-//
-//    foreach (UiPatterns::getManager()->getPatterns() as $pattern) {
-//      $items += $pattern->getThemeImplementation();
-//    }
-//    dd($items);
     return new JsonResponse($patternPaths);
   }
 
@@ -235,35 +107,6 @@ class UiPatternsCkeditorApi extends ControllerBase {
 
 
     $patternDefinitions = $uiPatternsManager->getDefinitions();
-//    dd($patternDefinitions);
-//    foreach ($patternDefinitions as $patternId => $patternDefinition) {
-//      // Assuming that $element is a suitable array for processing.
-//      $element = ['#id' => $patternId];
-//      $processedElement = PatternPreview::processFields($element);
-////      dd($processedElement);
-//    }
-//
-//
-//    foreach ($patternDefinitions as $patternId => $patternDefinition) {
-//      $element = ['#id' => $patternId];
-//      $definition = UiPatterns::getPatternDefinition($element['#id']);
-//      $element['#context'] = new PatternContext('preview');
-//      dd($element, 'element');
-//
-//      $fields = [];
-//      foreach ($definition->getFields() as $field) {
-//        $preview = $field->getPreview();
-//        // Some fields are used as Twig array keys and don't need escaping.
-////      if ($field->getEscape()) {
-////        // The examples are not user submitted and are safe markup.
-////        $preview = self::getPreviewMarkup($preview);
-////      }
-////      $fields[$field->getName()] = $preview;
-//
-//      }
-//      dd($preview, 'preview');
-//    }
-
 
 
     if (isset($patternDefinitions[$patternName])) {
@@ -277,7 +120,7 @@ class UiPatternsCkeditorApi extends ControllerBase {
     }
 
     if (!file_exists($patternPath)) {
-      return new JsonResponse(['error' => "Pattern {$patternName} not found"], 404);
+      return new JsonResponse(['error' => "Pattern {$patternName} not found yass"], 404);
     }
 
 
@@ -289,6 +132,7 @@ class UiPatternsCkeditorApi extends ControllerBase {
     if (isset($patternDefinitions[$patternName])) {
       $patternDefinition = $patternDefinitions[$patternName];
       $fields = $patternDefinition->getFields();
+//      dd($fields, 'fields');
 
       $fieldValues = [];
       foreach ($fields as $field) {
@@ -301,35 +145,41 @@ class UiPatternsCkeditorApi extends ControllerBase {
             $fieldValues[$field->getName()] = $preview ?? 'default text';
 //            dd('hello', $fieldValues[$field->getName()]);
             break;
-//          case 'image':
-//            $fieldValues[$field->getName()] = $preview ?? 'path/to/default/image.jpg';
-//            dd($fieldValues[$field->getName()], 'fieldValues');
-            break;
           case 'boolean':
             $fieldValues[$field->getName()] = $preview ?? false;
             break;
           case'render':
-//            $fieldValues[$field->getName()] = $preview ?? 'path/to/default/image.jpg';
-//            dd($fieldValues[$field->getName()] = $preview, 'fieldValues');
+
               foreach ($preview as $fieldName => $fieldValue) {
 //                dd($fieldName);
                 // Si la clé est "theme" et la valeur est "image", affichez la balise img
                 if ($fieldName === 'theme' && $fieldValue === 'image') {
                   // Construisez votre balise img avec les attributs nécessaires
                   $uri = $preview['uri']; // Supposons que 'uri' est toujours défini
-//                  dd($uri, 'uri');                  dd($uri, 'uri');
-//                  $encodedUri = rawurlencode($uri);
-//                  echo $uri;
-//                  dd($encodedUri, 'encodedUri');
                   $alt = $preview['alt'] ?? ''; // Valeur par défaut pour alt si non défini
                   $preview = "<img src=\"$uri\" alt=\"$alt\">";
+                  $fieldValues['image'] = $preview;
 //                  $fieldValues['image'] = [$preview];
 
                 }
-//               dd($preview);
-                // Vous pouvez ajouter d'autres conditions ou traitement selon les besoins
+                elseif ($fieldName === 'type' && $fieldValue === 'html_tag') {
+                  $tag = $preview['tag'] ?? '';
+                  $value = $preview['value'] ?? '';
+                  $attributes = $preview['attributes'] ?? [];
+
+                  // Construisez votre balise <a> avec les attributs nécessaires
+                  $fieldValues['title'] = "<$tag";
+
+                  foreach ($attributes as $attrName => $attrValue) {
+                    $fieldValues['title'] .= " $attrName=\"$attrValue\"";
+                  }
+
+                  $fieldValues['title'] .= ">$value</$tag>";
+
+                }
+
               }
-            $fieldValues['image'] = $preview;
+
             break;
           // Ajoutez d'autres types de champ au besoin
           default:
@@ -340,43 +190,33 @@ class UiPatternsCkeditorApi extends ControllerBase {
       // Gérer le cas où le motif spécifié n'a pas été trouvé
       echo "Le motif '$patternName' n'a pas été trouvé.";
     }
-//    dd($fieldValues, 'fieldValues');
 
 //    dd($fieldValues, 'fieldValues');
-//    dd($fieldValues);
-    $loader = new \Twig\Loader\ArrayLoader([$patternDefinition->getTemplate() => $content]);
-    $twig = new \Twig\Environment($loader);
 
+    $modifiedHtml = $this->replaceAddClassWithClass($content);
+
+    $modifiedHtml2 = $this->replaceAddClass($modifiedHtml);
+    dd($modifiedHtml2);
+
+
+//    dd($modifiedHtml);
+    $twig = new \Twig\Environment(new \Twig\Loader\ArrayLoader([$patternDefinition->getTemplate() => $modifiedHtml2]));
 // Get the service from the Drupal container.
     $extension = \Drupal::service('ui_patterns_ckeditor5.twig.extension');
     $extension2 = \Drupal::service('ui_patterns.twig.extension');
     $extension3 = \Drupal::service('ui_patterns_settings.twig');
     $extension5 = \Drupal::service('twig.extension');
-    $extension6 = \Drupal::service('twig');
-    $extension7 = \Drupal::service('twig.loader.string');
-    $extension8 = \Drupal::service('twig.loader.theme_registry');
 
 
-// Add the extension to the Twig environment.
-    $twig->addExtension($extension);
-    $twig->addExtension($extension2);
-    $twig->addExtension($extension3);
-    $twig->addExtension($extension5);
+    $extensions = [$extension, $extension2, $extension3, $extension5];
+    $twig->setExtensions($extensions);
 
 
     $template = $twig->load($patternDefinition->getTemplate());
 //    dd($template);
     $html = $template->render($fieldValues);
 //    dd($html);
-//    dd($html);
-//    dd($fieldKeys, $fieldValues);
 
-//    $twig = new \Twig\Environment(new \Twig\Loader\ArrayLoader([$patternDefinition->getTemplate() => $content]));
-////    dd($twig);
-//    $template = $twig->load($patternDefinition->getTemplate());
-//    dd($template);
-//    $html = $template->render($fieldValues);
-////    dd($html);
 
 
 
@@ -384,27 +224,7 @@ class UiPatternsCkeditorApi extends ControllerBase {
     return new JsonResponse(['content' => $html]);
   }
 
-//  public function getPatternVariables($patternName) {
-//    $patternVariables = [];
-//
-//    // Obtenez tous les modèles de motifs
-//    foreach (UiPatterns::getManager()->getPatterns() as $pattern) {
-//      dd($pattern);
-//      if ($pattern['pluginId'] === $patternName) {
-//        // Obtenez les variables du motif
-//        $patternVariables = $pattern->getVariables();
-//        break;
-//      }
-//    }
-//
-//
-//    // Remplacez les valeurs nulles par 'default_value'
-//    array_walk_recursive($patternVariables, function (&$value) {
-//      $value = ($value === null) ? 'default_value' : $value;
-//    });
-//
-//    return $patternVariables;
-//  }
+
 
   private function cleanTwigContent($content) {
     // Supprimer les blocs {% ... %}
@@ -416,8 +236,34 @@ class UiPatternsCkeditorApi extends ControllerBase {
     return $content;
   }
 
+  function replaceAddClassWithClass($htmlString) {
+    // Recherche de toutes les occurrences de {{ attributes.addClass('...') }}
+    $pattern = '/{{\s*attributes\.addClass\((["\'])(.*?)\1\)\s*}}/';
+    $replacement = ' class=$1$2$1';
+//    dd('hello', $htmlString);
 
-  private function flattenConfigArray(array $config, array $keys = []) {
+    return preg_replace($pattern, $replacement, $htmlString);
+  }
+//  @todo Replace the following function with the one above
+  function replaceAddClass($htmlString) {
+    // Recherche de toutes les occurrences de {{ variable|add_class('...') }}
+    $pattern = '/{{\s*([^\|]+)\|add_class\((["\'])(.*?)\2\)\s*}}/';
+    $replacement = '<$1 class=$2$3$2>';
+
+    // Remplace les occurrences dans la chaîne HTML
+    $result = preg_replace($pattern, $replacement, $htmlString);
+    $result = str_replace('{{', '<', $result);
+
+    // Affiche le résultat pour le débogage
+//    dd('hello', $result);
+
+    return $result;
+  }
+
+
+
+
+private function flattenConfigArray(array $config, array $keys = []) {
     $flattened = [];
 
     foreach ($config as $key => $value) {

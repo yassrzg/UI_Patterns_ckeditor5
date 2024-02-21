@@ -6,6 +6,7 @@ export function normalizeConfig(patternDefinitions = []) {
       const originalPatternOptionName = pattern_option.name;
 
       pattern_option.name = `${definition.id}:${originalPatternOptionName}`;
+      pattern_option.template =`${definition.template}:${originalPatternOptionName}`
       normalizedDefinitions.push({...pattern_option});
     });
   }

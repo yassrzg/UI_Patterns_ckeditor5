@@ -23,7 +23,7 @@ export default class UiPatternsGroupEditing extends Plugin {
     const editor = this.editor;
     // console.log(editor.config.get('UiPatternsGroup.options'));
     const normalizedPatternDefinitions = normalizeConfig(editor.config.get('UiPatternsGroup.options'));
-    // console.log(normalizedPatternDefinitions);
+    console.log(normalizedPatternDefinitions, 'normalizedPatternDefinitions');
 
     editor.commands.add('UiPatternsGroup', new UiPatternsGroupCommand(editor, normalizedPatternDefinitions));
 

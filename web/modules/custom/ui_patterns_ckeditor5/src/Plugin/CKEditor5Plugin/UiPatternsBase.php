@@ -249,6 +249,7 @@ abstract class UiPatternsBase extends CKEditor5PluginDefault implements CKEditor
       $basePath = $definition->getBasePath();
       $fileName = $definition->getFileName();
       $template = $definition->getTemplate();
+
 //      print_r($basePath);
 //      print_r($fileName);
 //      print_r($template);

@@ -29,7 +29,7 @@ trait AttributesFilterTrait {
    */
   public function addClass(mixed $element, ...$classes): mixed {
     if (!\is_array($element)) {
-      dd('hello');
+//      dd('hello');
       return $element;
     }
     if ($this->arrayIsList($element)) {

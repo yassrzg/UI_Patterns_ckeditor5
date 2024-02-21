@@ -3,6 +3,7 @@
 namespace Drupal\ui_patterns_ckeditor5\Template;
 
 use Twig\Extension\AbstractExtension;
+use Twig\Markup;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
@@ -49,10 +50,14 @@ class TwigExtension extends AbstractExtension {
   }
 
 
-  public function addClass($element, $class)
-  {
-    if (is_array($element)) {
+  public function addClass($element, $class) {
+    dd($element, $class, 'Debugging');
+    if (is_array($element) && isset($element['#attributes']['class'])) {
       $element['#attributes']['class'][] = $class;
+    } elseif ($element instanceof Markup) {
+      // Si $element est une instance de Markup (Twig_Markup),
+      // convertissez-la en tableau pour pouvoir ajouter la classe.
+      $element = ['#markup' => $element->toString(), '#attributes' => ['class' => [$class]]];
     }
 
     return $element;
